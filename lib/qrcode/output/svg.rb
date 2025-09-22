@@ -17,6 +17,11 @@ module QRCode
 				@light_color = light_color
 			end
 			
+			# @returns [Boolean] true if background should be transparent
+			def transparent?
+				@light_color.nil? || @light_color == "transparent"
+			end
+			
 			def render
 				total_size = (qrcode.size + (border * 2)) * cell_size
 				
@@ -24,8 +29,10 @@ module QRCode
 				svg << %[<?xml version="1.0" encoding="UTF-8"?>]
 				svg << %[<svg xmlns="http://www.w3.org/2000/svg" width="#{total_size}" height="#{total_size}" viewBox="0 0 #{total_size} #{total_size}">]
 				
-				# Background rectangle
-				svg << %[  <rect x="0" y="0" width="#{total_size}" height="#{total_size}" fill="#{light_color}"/>]
+				# Background rectangle (only if not transparent)
+				unless transparent?
+					svg << %[  <rect x="0" y="0" width="#{total_size}" height="#{total_size}" fill="#{light_color}"/>]
+				end
 				
 				# Generate dark modules as rectangles
 				qrcode.size.times do |row|

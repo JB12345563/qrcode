@@ -21,7 +21,7 @@ end
 # @parameter cell_size [Integer] The size of each cell in pixels (default: 10).
 # @parameter border [Integer] The border size in cells (default: 2).
 # @parameter dark_color [String] The color for dark modules (default: '#000000').
-# @parameter light_color [String] The color for light modules (default: '#ffffff').
+# @parameter light_color [String] The color for light modules (default: '#ffffff'). Set to "transparent" for a transparent background.
 def svg(data, cell_size: 10, border: 2, dark_color: "#000000", light_color: "#ffffff")
 	puts QRCode.svg(data, 
 		cell_size: cell_size, 

@@ -128,6 +128,26 @@ describe QRCode::Output::SVG do
 		expect(svg).to be(:include?, "width=\"#{expected_size}\"")
 		expect(svg).to be(:include?, "height=\"#{expected_size}\"")
 	end
+	
+	it "supports transparent background" do
+		# Test with nil light_color
+		renderer_nil = QRCode::Output::SVG.new(qr_code, light_color: nil)
+		svg_nil = renderer_nil.render
+		expect(renderer_nil.transparent?).to be == true
+		expect(svg_nil).not.to be(:include?, "fill=\"#{renderer_nil.light_color}\"")
+		
+		# Test with 'transparent' keyword
+		renderer_transparent = QRCode::Output::SVG.new(qr_code, light_color: "transparent")
+		svg_transparent = renderer_transparent.render
+		expect(renderer_transparent.transparent?).to be == true
+		expect(svg_transparent).not.to be(:include?, "fill=\"transparent\"")
+		
+		# Test that solid background still works
+		renderer_solid = QRCode::Output::SVG.new(qr_code, light_color: "#ffffff")
+		svg_solid = renderer_solid.render
+		expect(renderer_solid.transparent?).to be == false
+		expect(svg_solid).to be(:include?, "fill=\"#ffffff\"")
+	end
 end
 
 describe "QRCode.svg convenience method" do

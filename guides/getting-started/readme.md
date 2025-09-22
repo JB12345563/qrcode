@@ -58,6 +58,8 @@ svg_content = QRCode.svg("Hello World",
 )
 ```
 
+If you want a transparent SVG, set `light_color: nil`.
+
 ### Error Correction Levels
 
 QR codes support four standardized error correction levels:
@@ -98,7 +100,7 @@ You can also specify the encoding mode explicitly:
 ```ruby
 # Force specific encoding modes
 QRCode.text("12345", mode: :numeric)
-QRCode.text("HELLO", mode: :alphanumeric)  
+QRCode.text("HELLO", mode: :alphanumeric)
 QRCode.text("data", mode: :binary)
 ```
 
