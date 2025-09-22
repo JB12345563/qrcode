@@ -10,45 +10,47 @@
 # Copyright, 2025, by Samuel Williams.
 
 module QRCode
-	NUMERIC = %w[0 1 2 3 4 5 6 7 8 9].freeze
-	
-	class Numeric
-		def initialize(data)
-			raise ArgumentError, "Not a numeric string `#{data}`" unless Numeric.valid_data?(data)
-			
-			@data = data
-		end
+	module Encoder
+		NUMERIC = %w[0 1 2 3 4 5 6 7 8 9].freeze
 		
-		def self.valid_data?(data)
-			(data.chars - NUMERIC).empty?
-		end
-		
-		def write(buffer)
-			buffer.numeric_encoding_start(@data.size)
+		class Numeric
+			def initialize(data)
+				raise ArgumentError, "Not a numeric string `#{data}`" unless Encoder::Numeric.valid_data?(data)
+				
+				@data = data
+			end
 			
-			@data.size.times do |i|
-				if i % 3 == 0
-					chars = @data[i, 3]
-					bit_length = get_bit_length(chars.length)
-					buffer.put(get_code(chars), bit_length)
+			def self.valid_data?(data)
+				(data.chars - NUMERIC).empty?
+			end
+			
+			def write(buffer)
+				buffer.numeric_encoding_start(@data.size)
+				
+				@data.size.times do |i|
+					if i % 3 == 0
+						chars = @data[i, 3]
+						bit_length = get_bit_length(chars.length)
+						buffer.put(get_code(chars), bit_length)
+					end
 				end
 			end
-		end
-		
+			
 				private
-		
-		NUMBER_LENGTH = {
-			3 => 10,
-			2 => 7,
-			1 => 4
-		}.freeze
-		
-		def get_bit_length(length)
-			NUMBER_LENGTH[length]
-		end
-		
-		def get_code(chars)
-			chars.to_i
+			
+			NUMBER_LENGTH = {
+				3 => 10,
+				2 => 7,
+				1 => 4
+			}.freeze
+			
+			def get_bit_length(length)
+				NUMBER_LENGTH[length]
+			end
+			
+			def get_code(chars)
+				chars.to_i
+			end
 		end
 	end
 end

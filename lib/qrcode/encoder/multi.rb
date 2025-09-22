@@ -6,13 +6,15 @@
 # Copyright, 2025, by Samuel Williams.
 
 module QRCode
-	class Multi
-		def initialize(data)
-			@data = data
-		end
-		
-		def write(buffer)
-			@data.each {|seg| seg.writer.write(buffer)}
+	module Encoder
+		class Multi
+			def initialize(data)
+				@data = data
+			end
+			
+			def write(buffer)
+				@data.each {|seg| seg.writer.write(buffer)}
+			end
 		end
 	end
 end

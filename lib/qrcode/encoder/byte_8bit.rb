@@ -9,16 +9,18 @@
 # Copyright, 2025, by Samuel Williams.
 
 module QRCode
-	class Byte8bit
-		def initialize(data)
-			@data = data
-		end
-		
-		def write(buffer)
-			buffer.byte_encoding_start(@data.bytesize)
+	module Encoder
+		class Byte8bit
+			def initialize(data)
+				@data = data
+			end
 			
-			@data.each_byte do |b|
-				buffer.put(b, 8)
+			def write(buffer)
+				buffer.byte_encoding_start(@data.bytesize)
+				
+				@data.each_byte do |b|
+					buffer.put(b, 8)
+				end
 			end
 		end
 	end

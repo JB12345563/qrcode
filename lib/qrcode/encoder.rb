@@ -4,3 +4,7 @@
 # Copyright, 2025, by Samuel Williams.
 
 require_relative "encoder/code"
+
+# @namespace
+module QRCode
+end
