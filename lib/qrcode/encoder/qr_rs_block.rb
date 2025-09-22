@@ -269,7 +269,7 @@ module QRCode
 			rs_block = QRRSBlock.get_rs_block_table(version, error_correct_level)
 			
 			if rs_block.nil?
-				raise QRCodeRunTimeError, "bad rsblock @ version: #{version}/error_correct_level:#{error_correct_level}"
+				raise RuntimeError, "bad rsblock @ version: #{version}/error_correct_level:#{error_correct_level}"
 			end
 			
 			length = rs_block.size / 3

@@ -125,7 +125,7 @@ module QRCode
 		
 		def self.get_mask(mask_pattern, i, j)
 			if mask_pattern > QRMASKCOMPUTATIONS.size
-				raise QRCodeRunTimeError, "bad mask_pattern: #{mask_pattern}"
+				raise RuntimeError, "bad mask_pattern: #{mask_pattern}"
 			end
 			
 			QRMASKCOMPUTATIONS[mask_pattern].call(i, j)
@@ -143,11 +143,11 @@ module QRCode
 		
 		def self.get_length_in_bits(mode, version)
 			if !QRMODE.value?(mode)
-				raise QRCodeRunTimeError, "Unknown mode: #{mode}"
+				raise RuntimeError, "Unknown mode: #{mode}"
 			end
 			
 			if version > 40
-				raise QRCodeRunTimeError, "Unknown version: #{version}"
+				raise RuntimeError, "Unknown version: #{version}"
 			end
 			
 			if version.between?(1, 9)

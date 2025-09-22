@@ -20,53 +20,53 @@ describe QRCode do
 	it "raises argument error for invalid inputs" do
 		expect do
 			QRCode::QRCode.new(size: 1, level: :h)
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
+		end.to raise_exception(ArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 		
 		expect do
 			QRCode::QRCode.new(nil)
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
+		end.to raise_exception(ArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 		
 		expect do
 			QRCode::QRCode.new({})
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
+		end.to raise_exception(ArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 		
 		expect do
 			QRCode::QRCode.new({})
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
+		end.to raise_exception(ArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 		
 		expect do
 			QRCode::QRCode.new(123)
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
+		end.to raise_exception(ArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 		
 		expect do
 			assert QRCode::QRCode.new("10000000000000000000", size: 41, level: :h)
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "Given size greater than maximum possible size of 40")
+		end.to raise_exception(ArgumentError, message: be == "Given size greater than maximum possible size of 40")
 		
 		expect do
 			assert QRCode::QRCode.new("hello", size: 1, level: :a)
-		end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "Unknown error correction level `:a`")
+		end.to raise_exception(ArgumentError, message: be == "Unknown error correction level `:a`")
 	end
 	
 	it "raises runtime error for invalid inputs" do
 		expect do
 			QRCode::QRCode.new("duncan").checked?(0, 999999)
-		end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "Invalid row/column pair: 0, 999999")
+		end.to raise_exception(RuntimeError, message: be == "Invalid row/column pair: 0, 999999")
 		
 		expect do
 			assert QRCode::QRCode.new("10000000000000000000", size: 1, level: :h)
-		end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "code length overflow. (81>72). (Try a larger size!)")
+		end.to raise_exception(RuntimeError, message: be == "code length overflow. (81>72). (Try a larger size!)")
 		
 		expect do
 			QRCode::QRUtil.get_mask(9, 1, 2)
-		end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "bad mask_pattern: 9")
+		end.to raise_exception(RuntimeError, message: be == "bad mask_pattern: 9")
 		
 		expect do
 			assert QRCode::QRUtil.get_length_in_bits(:duncan, 1)
-		end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "Unknown mode: duncan")
+		end.to raise_exception(RuntimeError, message: be == "Unknown mode: duncan")
 		
 		expect do
 			assert QRCode::QRUtil.get_length_in_bits(1 << 0, 41)
-		end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "Unknown version: 41")
+		end.to raise_exception(RuntimeError, message: be == "Unknown version: 41")
 	end
 	
 	it "creates a QR code with level H" do
@@ -139,7 +139,7 @@ describe QRCode do
 		
 		expect do
 			QRCode::QRCode.new("Duncan", mode: :alphanumeric)
-		end.to raise_exception(QRCode::QRCodeArgumentError)
+		end.to raise_exception(ArgumentError)
 	end
 	
 	it "automatically uses numeric mode" do
@@ -178,7 +178,7 @@ describe QRCode do
 	it "raises an error for exceeding max size" do
 		expect do
 			QRCode::QRCode.new("duncan", size: 41)
-		end.to raise_exception(QRCode::QRCodeArgumentError)
+		end.to raise_exception(ArgumentError)
 	end
 	
 	it "returns the error correction level" do
@@ -202,7 +202,7 @@ describe QRCode do
 		%w[a b c d e f g i j k n o p r s t u v w x y z].each do |ltr|
 			expect do
 				QRCode::QRCode.new("duncan", level: ltr.to_sym)
-			end.to raise_exception(QRCode::QRCodeArgumentError)
+			end.to raise_exception(ArgumentError)
 		end
 	end
 	

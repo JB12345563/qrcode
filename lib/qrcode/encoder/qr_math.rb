@@ -28,7 +28,7 @@ module QRCode
 		
 		class << self
 			def glog(n)
-				raise QRCodeRunTimeError, "glog(#{n})" if n < 1
+				raise RuntimeError, "glog(#{n})" if n < 1
 				LOG_TABLE[n]
 			end
 			

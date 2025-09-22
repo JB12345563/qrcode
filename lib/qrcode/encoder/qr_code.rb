@@ -71,23 +71,23 @@ module QRCode
 			when String
 				@data = QRSegment.new(data: data, mode: options[:mode])
 			when Array
-				raise QRCodeArgumentError, "Array must contain Hashes with :data and :mode keys" unless data.all? {|seg| seg.is_a?(Hash) && %i[data mode].all? {|s| seg.key? s}}
+				raise ArgumentError, "Array must contain Hashes with :data and :mode keys" unless data.all? {|seg| seg.is_a?(Hash) && %i[data mode].all? {|s| seg.key? s}}
 				@data = data.map {|seg| QRSegment.new(**seg)}
 			when QRSegment
 				@data = data
 			else
-				raise QRCodeArgumentError, "data must be a String, QRSegment, or an Array"
+				raise ArgumentError, "data must be a String, QRSegment, or an Array"
 			end
 			@error_correct_level = QRERRORCORRECTLEVEL[level]
 			
 			unless @error_correct_level
-				raise QRCodeArgumentError, "Unknown error correction level `#{level.inspect}`"
+				raise ArgumentError, "Unknown error correction level `#{level.inspect}`"
 			end
 			
 			size = options[:size] || minimum_version(limit: max_size)
 			
 			if size > max_size
-				raise QRCodeArgumentError, "Given size greater than maximum possible size of #{QRUtil.max_size}"
+				raise ArgumentError, "Given size greater than maximum possible size of #{QRUtil.max_size}"
 			end
 			
 			@version = size
@@ -108,7 +108,7 @@ module QRCode
 		
 		def checked?(row, col)
 			if !row.between?(0, @module_count - 1) || !col.between?(0, @module_count - 1)
-				raise QRCodeRunTimeError, "Invalid row/column pair: #{row}, #{col}"
+				raise RuntimeError, "Invalid row/column pair: #{row}, #{col}"
 			end
 			@modules[row][col]
 		end
@@ -363,7 +363,7 @@ module QRCode
 		end
 		
 		def minimum_version(limit: QRUtil.max_size, version: 1)
-			raise QRCodeRunTimeError, "Data length exceed maximum capacity of version #{limit}" if version > limit
+			raise RuntimeError, "Data length exceed maximum capacity of version #{limit}" if version > limit
 			
 			max_size_bits = QRMAXBITS[error_correction_level][version - 1]
 			
@@ -396,7 +396,7 @@ module QRCode
 				buffer.end_of_message(max_data_bits)
 				
 				if buffer.get_length_in_bits > max_data_bits
-					raise QRCodeRunTimeError, "code length overflow. (#{buffer.get_length_in_bits}>#{max_data_bits}). (Try a larger size!)"
+					raise RuntimeError, "code length overflow. (#{buffer.get_length_in_bits}>#{max_data_bits}). (Try a larger size!)"
 				end
 				
 				buffer.pad_until(max_data_bits)

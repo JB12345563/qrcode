@@ -9,7 +9,7 @@ require_relative "qr_math"
 module QRCode
 	class QRPolynomial
 		def initialize(num, shift)
-			raise QRCodeRunTimeError, "#{num.size}/#{shift}" if num.empty?
+			raise RuntimeError, "#{num.size}/#{shift}" if num.empty?
 			offset = 0
 			
 			while offset < num.size && num[offset] == 0

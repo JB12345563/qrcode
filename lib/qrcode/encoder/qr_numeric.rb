@@ -14,7 +14,7 @@ module QRCode
 	
 	class QRNumeric
 		def initialize(data)
-			raise QRCodeArgumentError, "Not a numeric string `#{data}`" unless QRNumeric.valid_data?(data)
+			raise ArgumentError, "Not a numeric string `#{data}`" unless QRNumeric.valid_data?(data)
 			
 			@data = data
 		end

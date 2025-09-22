@@ -22,10 +22,10 @@ describe QRCode::QRSegment do
 	it "handles invalid code configs" do
 		expect do
 			QRCode::QRCode.new(:not_a_string_or_array)
-		end.to raise_exception(QRCode::QRCodeArgumentError)
+		end.to raise_exception(ArgumentError)
 		
 		expect do
 			QRCode::QRCode.new(PAYLOAD << :not_a_segment)
-		end.to raise_exception(QRCode::QRCodeArgumentError)
+		end.to raise_exception(ArgumentError)
 	end
 end
