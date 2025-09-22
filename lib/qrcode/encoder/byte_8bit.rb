@@ -9,7 +9,7 @@
 # Copyright, 2025, by Samuel Williams.
 
 module QRCode
-	class QR8bitByte
+	class Byte8bit
 		def initialize(data)
 			@data = data
 		end

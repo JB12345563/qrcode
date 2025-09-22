@@ -8,24 +8,24 @@
 require "qrcode"
 require "qrcode"
 
-describe QRCode::QRSegment do
+describe QRCode::Segment do
 	PAYLOAD = [{data: "byteencoded", mode: :byte_8bit}, {data: "A1" * 107, mode: :alphanumeric}, {data: "1" * 498, mode: :number}]
 	
 	it "handles multi payloads" do
-		QRCode::QRCode.new(PAYLOAD, level: :l)
-		QRCode::QRCode.new(PAYLOAD, level: :m)
-		QRCode::QRCode.new(PAYLOAD, level: :q)
-		QRCode::QRCode.new(PAYLOAD)
-		QRCode::QRCode.new(PAYLOAD, level: :l, max_size: 22)
+		QRCode::Code.new(PAYLOAD, level: :l)
+		QRCode::Code.new(PAYLOAD, level: :m)
+		QRCode::Code.new(PAYLOAD, level: :q)
+		QRCode::Code.new(PAYLOAD)
+		QRCode::Code.new(PAYLOAD, level: :l, max_size: 22)
 	end
 	
 	it "handles invalid code configs" do
 		expect do
-			QRCode::QRCode.new(:not_a_string_or_array)
+			QRCode::Code.new(:not_a_string_or_array)
 		end.to raise_exception(ArgumentError)
 		
 		expect do
-			QRCode::QRCode.new(PAYLOAD << :not_a_segment)
+			QRCode::Code.new(PAYLOAD << :not_a_segment)
 		end.to raise_exception(ArgumentError)
 	end
 end

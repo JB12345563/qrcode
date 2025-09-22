@@ -5,5 +5,7 @@
 # Copyright, 2020, by Nathaniel Roman.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "qrcode/encoder"
-require_relative "qrcode/version"
+module QRCode
+	require_relative "qrcode/encoder"
+	require_relative "qrcode/version"
+end

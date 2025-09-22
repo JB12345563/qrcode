@@ -6,7 +6,7 @@
 # Copyright, 2025, by Samuel Williams.
 
 module QRCode
-	class QRMulti
+	class Multi
 		def initialize(data)
 			@data = data
 		end

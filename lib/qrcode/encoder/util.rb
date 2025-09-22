@@ -11,12 +11,12 @@
 # Copyright, 2021, by Sam Sayer.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "qr_constants"
-require_relative "qr_math"
-require_relative "qr_polynomial"
+require_relative "constants"
+require_relative "math"
+require_relative "polynomial"
 
 module QRCode
-	class QRUtil
+	class Util
 		PATTERN_POSITION_TABLE = [
 			[],
 			[6, 18],
@@ -70,9 +70,9 @@ module QRCode
 		DEMERIT_POINTS_4 = 10
 		
 		BITS_FOR_MODE = {
-			QRMODE[:mode_number] => [10, 12, 14],
-			QRMODE[:mode_alpha_numk] => [9, 11, 13],
-			QRMODE[:mode_8bit_byte] => [8, 16, 16]
+			MODE[:mode_number] => [10, 12, 14],
+			MODE[:mode_alpha_numk] => [9, 11, 13],
+			MODE[:mode_8bit_byte] => [8, 16, 16]
 		}.freeze
 		
 		# This value is used during the right shift zero fill step. It is
@@ -89,8 +89,8 @@ module QRCode
 		
 		def self.get_bch_format_info(data)
 			d = data << 10
-			while QRUtil.get_bch_digit(d) - QRUtil.get_bch_digit(G15) >= 0
-				d ^= (G15 << (QRUtil.get_bch_digit(d) - QRUtil.get_bch_digit(G15)))
+			while Util.get_bch_digit(d) - Util.get_bch_digit(G15) >= 0
+				d ^= (G15 << (Util.get_bch_digit(d) - Util.get_bch_digit(G15)))
 			end
 			((data << 10) | d) ^ G15_MASK
 		end
@@ -102,8 +102,8 @@ module QRCode
 		
 		def self.get_bch_version(data)
 			d = data << 12
-			while QRUtil.get_bch_digit(d) - QRUtil.get_bch_digit(G18) >= 0
-				d ^= (G18 << (QRUtil.get_bch_digit(d) - QRUtil.get_bch_digit(G18)))
+			while Util.get_bch_digit(d) - Util.get_bch_digit(G18) >= 0
+				d ^= (G18 << (Util.get_bch_digit(d) - Util.get_bch_digit(G18)))
 			end
 			(data << 12) | d
 		end
@@ -113,7 +113,7 @@ module QRCode
 			
 			while data != 0
 				digit += 1
-				data = QRUtil.rszf(data, 1)
+				data = Util.rszf(data, 1)
 			end
 			
 			digit
@@ -124,25 +124,25 @@ module QRCode
 		end
 		
 		def self.get_mask(mask_pattern, i, j)
-			if mask_pattern > QRMASKCOMPUTATIONS.size
+			if mask_pattern > MASK_COMPUTATIONS.size
 				raise RuntimeError, "bad mask_pattern: #{mask_pattern}"
 			end
 			
-			QRMASKCOMPUTATIONS[mask_pattern].call(i, j)
+			MASK_COMPUTATIONS[mask_pattern].call(i, j)
 		end
 		
 		def self.get_error_correct_polynomial(error_correct_length)
-			a = QRPolynomial.new([1], 0)
+			a = Polynomial.new([1], 0)
 			
 			(0...error_correct_length).each do |i|
-				a = a.multiply(QRPolynomial.new([1, QRMath.gexp(i)], 0))
+				a = a.multiply(Polynomial.new([1, Math.gexp(i)], 0))
 			end
 			
 			a
 		end
 		
 		def self.get_length_in_bits(mode, version)
-			if !QRMODE.value?(mode)
+			if !MODE.value?(mode)
 				raise RuntimeError, "Unknown mode: #{mode}"
 			end
 			
@@ -167,10 +167,10 @@ module QRCode
 		def self.get_lost_points(modules)
 			demerit_points = 0
 			
-			demerit_points += QRUtil.demerit_points_1_same_color(modules)
-			demerit_points += QRUtil.demerit_points_2_full_blocks(modules)
-			demerit_points += QRUtil.demerit_points_3_dangerous_patterns(modules)
-			demerit_points += QRUtil.demerit_points_4_dark_ratio(modules)
+			demerit_points += Util.demerit_points_1_same_color(modules)
+			demerit_points += Util.demerit_points_2_full_blocks(modules)
+			demerit_points += Util.demerit_points_3_dangerous_patterns(modules)
+			demerit_points += Util.demerit_points_4_dark_ratio(modules)
 			
 			demerit_points
 		end

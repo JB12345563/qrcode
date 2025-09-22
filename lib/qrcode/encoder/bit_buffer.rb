@@ -9,11 +9,11 @@
 # Copyright, 2020, by Nathaniel Roman.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "qr_constants"
-require_relative "qr_util"
+require_relative "constants"
+require_relative "util"
 
 module QRCode
-	class QRBitBuffer
+	class BitBuffer
 		attr_reader :buffer
 		
 		PAD0 = 0xEC
@@ -27,12 +27,12 @@ module QRCode
 		
 		def get(index)
 			buf_index = (index / 8).floor
-			(QRUtil.rszf(@buffer[buf_index], 7 - index % 8) & 1) == 1
+			(Util.rszf(@buffer[buf_index], 7 - index % 8) & 1) == 1
 		end
 		
 		def put(num, length)
 			(0...length).each do |i|
-				put_bit((QRUtil.rszf(num, length - i - 1) & 1) == 1)
+				put_bit((Util.rszf(num, length - i - 1) & 1) == 1)
 			end
 		end
 		
@@ -47,25 +47,25 @@ module QRCode
 			end
 			
 			if bit
-				@buffer[buf_index] |= QRUtil.rszf(0x80, @length % 8)
+				@buffer[buf_index] |= Util.rszf(0x80, @length % 8)
 			end
 			
 			@length += 1
 		end
 		
 		def byte_encoding_start(length)
-			put(QRMODE[:mode_8bit_byte], 4)
-			put(length, QRUtil.get_length_in_bits(QRMODE[:mode_8bit_byte], @version))
+			put(MODE[:mode_8bit_byte], 4)
+			put(length, Util.get_length_in_bits(MODE[:mode_8bit_byte], @version))
 		end
 		
 		def alphanumeric_encoding_start(length)
-			put(QRMODE[:mode_alpha_numk], 4)
-			put(length, QRUtil.get_length_in_bits(QRMODE[:mode_alpha_numk], @version))
+			put(MODE[:mode_alpha_numk], 4)
+			put(length, Util.get_length_in_bits(MODE[:mode_alpha_numk], @version))
 		end
 		
 		def numeric_encoding_start(length)
-			put(QRMODE[:mode_number], 4)
-			put(length, QRUtil.get_length_in_bits(QRMODE[:mode_number], @version))
+			put(MODE[:mode_number], 4)
+			put(length, Util.get_length_in_bits(MODE[:mode_number], @version))
 		end
 		
 		def pad_until(prefered_size)

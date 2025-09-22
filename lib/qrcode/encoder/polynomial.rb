@@ -4,10 +4,10 @@
 # Copyright, 2008-2021, by Duncan Robertson.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "qr_math"
+require_relative "math"
 
 module QRCode
-	class QRPolynomial
+	class Polynomial
 		def initialize(num, shift)
 			raise RuntimeError, "#{num.size}/#{shift}" if num.empty?
 			offset = 0
@@ -37,11 +37,11 @@ module QRCode
 			(0...get_length).each do |i|
 				(0...e.get_length).each do |j|
 					tmp = num[i + j].nil? ? 0 : num[i + j]
-					num[i + j] = tmp ^ QRMath.gexp(QRMath.glog(get(i)) + QRMath.glog(e.get(j)))
+					num[i + j] = tmp ^ Math.gexp(Math.glog(get(i)) + Math.glog(e.get(j)))
 				end
 			end
 			
-			QRPolynomial.new(num, 0)
+			Polynomial.new(num, 0)
 		end
 		
 		def mod(e)
@@ -49,7 +49,7 @@ module QRCode
 				return self
 			end
 			
-			ratio = QRMath.glog(get(0)) - QRMath.glog(e.get(0))
+			ratio = Math.glog(get(0)) - Math.glog(e.get(0))
 			num = Array.new(get_length)
 			
 			(0...get_length).each do |i|
@@ -58,10 +58,10 @@ module QRCode
 			
 			(0...e.get_length).each do |i|
 				tmp = num[i].nil? ? 0 : num[i]
-				num[i] = tmp ^ QRMath.gexp(QRMath.glog(e.get(i)) + ratio)
+				num[i] = tmp ^ Math.gexp(Math.glog(e.get(i)) + ratio)
 			end
 			
-			QRPolynomial.new(num, 0).mod(e)
+			Polynomial.new(num, 0).mod(e)
 		end
 	end
 end

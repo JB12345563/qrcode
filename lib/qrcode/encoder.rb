@@ -3,4 +3,4 @@
 # Released under the MIT License.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "encoder/qr_code"
+require_relative "encoder/code"

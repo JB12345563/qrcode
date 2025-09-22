@@ -6,17 +6,17 @@
 
 require "qrcode"
 
-describe QRCode::QRUtil do
+describe QRCode::Util do
 	it "calculates demerit points for 4 dark ratio" do
 		# Test with all white modules (ratio = 0)
 		# Expected: (100 * 0 - 50).abs / 5 * 10 = 10 * 10 = 100
 		modules = Array.new(4) {Array.new(4, false)}
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 100
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 100
 		
 		# Test with all black modules (ratio = 1)
 		# Expected: (100 * 1 - 50).abs / 5 * 10 = 50 / 5 * 10 = 10 * 10 = 100
 		modules = Array.new(4) {Array.new(4, true)}
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 100
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 100
 		
 		# Test with half black, half white modules (ratio = 0.5)
 		# Expected: (100 * 0.5 - 50).abs / 5 * 10 = 0 / 5 * 10 = 0
@@ -26,7 +26,7 @@ describe QRCode::QRUtil do
 			[false, false, true, true],
 			[false, false, true, true]
 		]
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 0
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 0
 		
 		# Test with 25% black modules (ratio = 0.25)
 		# Expected: (100 * 0.25 - 50).abs / 5 * 10 = 25 / 5 * 10 = 5 * 10 = 50
@@ -36,7 +36,7 @@ describe QRCode::QRUtil do
 			[false, false, true, false],
 			[false, false, false, true]
 		]
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 50
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 50
 		
 		# Test with 75% black modules (ratio = 0.75)
 		# Expected: (100 * 0.75 - 50).abs / 5 * 10 = 25 / 5 * 10 = 5 * 10 = 50
@@ -46,7 +46,7 @@ describe QRCode::QRUtil do
 			[true, true, false, true],
 			[true, false, false, true]
 		]
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 50
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 50
 		
 		# Test with different sized modules (3x3)
 		# 3 black out of 9 = 1/3 ratio = 0.33...
@@ -57,23 +57,23 @@ describe QRCode::QRUtil do
 			[false, false, true]
 		]
 		expected = ((100 * (3.0 / 9) - 50).abs / 5) * 10
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be_within(0.01).of(expected)
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be_within(0.01).of(expected)
 	end
 	
 	it "handles edge cases for demerit points for 4 dark ratio" do
 		# Test with empty modules
 		# This shouldn't happen in real QR codes, but let's be safe
 		modules = []
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be(:nan?)
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be(:nan?)
 		
 		# Test with 1x1 module
 		# All white
 		modules = [[false]]
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 100
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 100
 		
 		# All black
 		modules = [[true]]
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be == 100
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be == 100
 	end
 	
 	it "handles formula for demerit points for 4 dark ratio" do
@@ -107,6 +107,6 @@ describe QRCode::QRUtil do
 		expect(demerit_points).to be_within(0.001).of(4)
 		
 		# Check that our method gives the same result
-		expect(QRCode::QRUtil.demerit_points_4_dark_ratio(modules)).to be_within(0.001).of(4)
+		expect(QRCode::Util.demerit_points_4_dark_ratio(modules)).to be_within(0.001).of(4)
 	end
 end

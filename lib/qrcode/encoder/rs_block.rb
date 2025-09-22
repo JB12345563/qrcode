@@ -6,10 +6,10 @@
 # Copyright, 2015, by Björn Blomqvist.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "qr_constants"
+require_relative "constants"
 
 module QRCode
-	class QRRSBlock
+	class RSBlock
 		attr_reader :data_count, :total_count
 		
 		def initialize(total_count, data_count)
@@ -266,7 +266,7 @@ module QRCode
 		].freeze
 		
 		def self.get_rs_blocks(version, error_correct_level)
-			rs_block = QRRSBlock.get_rs_block_table(version, error_correct_level)
+			rs_block = RSBlock.get_rs_block_table(version, error_correct_level)
 			
 			if rs_block.nil?
 				raise RuntimeError, "bad rsblock @ version: #{version}/error_correct_level:#{error_correct_level}"
@@ -281,7 +281,7 @@ module QRCode
 				data_count = rs_block[i * 3 + 2]
 				
 				(0...count).each do |j|
-					list << QRRSBlock.new(total_count, data_count)
+					list << RSBlock.new(total_count, data_count)
 				end
 			end
 			
@@ -290,14 +290,14 @@ module QRCode
 		
 		def self.get_rs_block_table(version, error_correct_level)
 			case error_correct_level
-			when QRERRORCORRECTLEVEL[:l]
-				QRRSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 0]
-			when QRERRORCORRECTLEVEL[:m]
-				QRRSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 1]
-			when QRERRORCORRECTLEVEL[:q]
-				QRRSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 2]
-			when QRERRORCORRECTLEVEL[:h]
-				QRRSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 3]
+			when ERROR_CORRECT_LEVEL[:l]
+				RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 0]
+			when ERROR_CORRECT_LEVEL[:m]
+				RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 1]
+			when ERROR_CORRECT_LEVEL[:q]
+				RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 2]
+			when ERROR_CORRECT_LEVEL[:h]
+				RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 3]
 			end
 		end
 	end

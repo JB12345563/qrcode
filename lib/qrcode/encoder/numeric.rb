@@ -12,9 +12,9 @@
 module QRCode
 	NUMERIC = %w[0 1 2 3 4 5 6 7 8 9].freeze
 	
-	class QRNumeric
+	class Numeric
 		def initialize(data)
-			raise ArgumentError, "Not a numeric string `#{data}`" unless QRNumeric.valid_data?(data)
+			raise ArgumentError, "Not a numeric string `#{data}`" unless Numeric.valid_data?(data)
 			
 			@data = data
 		end

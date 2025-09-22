@@ -5,28 +5,28 @@
 # Copyright, 2021-2025, by Duncan Robertson.
 # Copyright, 2025, by Samuel Williams.
 
-require_relative "qr_constants"
-require_relative "qr_numeric"
-require_relative "qr_alphanumeric"
-require_relative "qr_multi"
-require_relative "qr_8bit_byte"
-require_relative "qr_util"
+require_relative "constants"
+require_relative "numeric"
+require_relative "alphanumeric"
+require_relative "multi"
+require_relative "byte_8bit"
+require_relative "util"
 
 module QRCode
-	class QRSegment
+	class Segment
 		attr_reader :data, :mode
 		
 		def initialize(data:, mode: nil)
 			@data = data
-			@mode = QRMODE_NAME.dig(mode&.to_sym)
+			@mode = MODE_NAME.dig(mode&.to_sym)
 			
 			# If mode is not explicitly found choose mode according to data type
-			@mode ||= if QRNumeric.valid_data?(@data)
-				QRMODE_NAME[:number]
-			elsif QRAlphanumeric.valid_data?(@data)
-				QRMODE_NAME[:alphanumeric]
+			@mode ||= if Numeric.valid_data?(@data)
+				MODE_NAME[:number]
+			elsif Alphanumeric.valid_data?(@data)
+				MODE_NAME[:alphanumeric]
 			else
-				QRMODE_NAME[:byte_8bit]
+				MODE_NAME[:byte_8bit]
 			end
 		end
 		
@@ -35,13 +35,13 @@ module QRCode
 		end
 		
 		def header_size(version)
-			QRUtil.get_length_in_bits(QRMODE[mode], version)
+			Util.get_length_in_bits(MODE[mode], version)
 		end
 		
 		def content_size
 			chunk_size, bit_length, extra = case mode
 			when :mode_number
-				[3, QRNumeric::NUMBER_LENGTH[3], QRNumeric::NUMBER_LENGTH[data_length % 3] || 0]
+				[3, Numeric::NUMBER_LENGTH[3], Numeric::NUMBER_LENGTH[data_length % 3] || 0]
 			when :mode_alpha_numk
 				[2, 11, 6]
 			when :mode_8bit_byte
@@ -54,13 +54,13 @@ module QRCode
 		def writer
 			case mode
 			when :mode_number
-				QRNumeric.new(data)
+				Numeric.new(data)
 			when :mode_alpha_numk
-				QRAlphanumeric.new(data)
+				Alphanumeric.new(data)
 			when :mode_multi
-				QRMulti.new(data)
+				Multi.new(data)
 			else
-				QR8bitByte.new(data)
+				Byte8bit.new(data)
 			end
 		end
 		

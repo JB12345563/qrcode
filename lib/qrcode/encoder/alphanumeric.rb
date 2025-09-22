@@ -13,9 +13,9 @@ module QRCode
 		"%", "*", "+", "-", ".", "/", ":"
 	].freeze
 	
-	class QRAlphanumeric
+	class Alphanumeric
 		def initialize(data)
-			unless QRAlphanumeric.valid_data?(data)
+			unless Alphanumeric.valid_data?(data)
 				raise ArgumentError, "Not a alpha numeric uppercase string `#{data}`"
 			end
 			

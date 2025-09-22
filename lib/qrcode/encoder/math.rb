@@ -5,7 +5,7 @@
 # Copyright, 2025, by Samuel Williams.
 
 module QRCode
-	class QRMath
+	class Math
 		module_eval do
 			exp_table = Array.new(256)
 			log_table = Array.new(256)
