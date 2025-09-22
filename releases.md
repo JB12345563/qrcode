@@ -1,8 +1,8 @@
 # Releases
 
-## Unreleased
+## v0.2.0
 
-- Added transparent SVG background support using `light_color: nil` or `light_color: "transparent"`.
+  - Added transparent SVG background support using `light_color: nil` or `light_color: "transparent"`.
 
 ## v0.1.0
 
