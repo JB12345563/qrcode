@@ -41,6 +41,9 @@ module QRCode
 		class Code
 			attr_reader :modules, :module_count, :version
 			
+			# Alias for module_count - the width/height of the QR code square
+			alias_method :size, :module_count
+			
 			# Expects a string or array (for multi-segment encoding) to be parsed in, other args are optional
 			#
 			#   # data - the string, Encoder::Segment or array of Hashes (with data:, mode: keys) you wish to encode
@@ -103,16 +106,12 @@ module QRCode
 			#
 			#  instance.checked?( 10, 10 ) => true
 			#
-			
 			def checked?(row, col)
 				if !row.between?(0, @module_count - 1) || !col.between?(0, @module_count - 1)
 					raise RuntimeError, "Invalid row/column pair: #{row}, #{col}"
 				end
 				@modules[row][col]
 			end
-			alias_method :dark?, :checked?
-			extend Gem::Deprecate
-			deprecate :dark?, :checked?, 2020, 1
 			
 			# This is a public method that returns the QR Code you have
 			# generated as a string. It will not be able to be read
@@ -131,7 +130,6 @@ module QRCode
 			#  EQQQQQEQQEEEQQEEEEEEQEEEQQEQQQQQE
 			#  EQEEEQEQQEEEEEQEQQQQQQQEEQEQEEEQE
 			#
-			
 			def to_s(*args)
 				options = extract_options!(args)
 				dark = options[:dark] || "x"
@@ -160,7 +158,6 @@ module QRCode
 			#  QRCode::Encoder::Code.new('my string to generate', size: 4, level: :h)
 			#  => QRCodeCore: @data='my string to generate', @error_correct_level=2, @version=4, @module_count=33
 			#
-			
 			def inspect
 				"QRCodeCore: @data='#{@data}', @error_correct_level=#{@error_correct_level}, @version=#{@version}, @module_count=#{@module_count}"
 			end

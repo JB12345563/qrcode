@@ -7,3 +7,19 @@
 
 require_relative "qrcode/version"
 require_relative "qrcode/encoder"
+require_relative "qrcode/output/text"
+require_relative "qrcode/output/svg"
+
+module QRCode
+	# Convenience method to create a QR code and render as text
+	def self.text(data, **options)
+		qr = Encoder::Code.new(data)
+		Output::Text.new(qr, **options).render
+	end
+	
+	# Convenience method to create a QR code and render as SVG
+	def self.svg(data, **options)
+		qr = Encoder::Code.new(data)
+		Output::SVG.new(qr, **options).render
+	end
+end

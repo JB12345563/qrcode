@@ -7,4 +7,7 @@ require_relative "encoder/code"
 
 # @namespace
 module QRCode
+	# @namespace
+	module Encoder
+	end
 end
