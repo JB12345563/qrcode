@@ -1,213 +1,208 @@
-require_relative "../test_helper"
+require "qrcode"
+require "qrcode/sample_data"
 
-class QRCode::BaseTest < Minitest::Test
-  require_relative "data"
-
-  def test_qrcode_argument_error
-    error = assert_raises(QRCode::QRCodeArgumentError) do
+describe QRCode do
+  it "raises argument error for invalid inputs" do
+    expect do
       QRCode::QRCode.new(size: 1, level: :h)
-    end
-    assert_equal "data must be a String, QRSegment, or an Array", error.message
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 
-    error = assert_raises(QRCode::QRCodeArgumentError) do
+    expect do
       QRCode::QRCode.new(nil)
-    end
-    assert_equal "data must be a String, QRSegment, or an Array", error.message
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 
-    error = assert_raises(QRCode::QRCodeArgumentError) do
+    expect do
       QRCode::QRCode.new({})
-    end
-    assert_equal "data must be a String, QRSegment, or an Array", error.message
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 
-    error = assert_raises(QRCode::QRCodeArgumentError) do
+    expect do
+      QRCode::QRCode.new({})
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
+
+    expect do
       QRCode::QRCode.new(123)
-    end
-    assert_equal "data must be a String, QRSegment, or an Array", error.message
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "data must be a String, QRSegment, or an Array")
 
-    error = assert_raises(QRCode::QRCodeArgumentError) do
+    expect do
       assert QRCode::QRCode.new("10000000000000000000", size: 41, level: :h)
-    end
-    assert_equal "Given size greater than maximum possible size of 40", error.message
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "Given size greater than maximum possible size of 40")
 
-    error = assert_raises(QRCode::QRCodeArgumentError) do
+    expect do
       assert QRCode::QRCode.new("hello", size: 1, level: :a)
-    end
-    assert_equal "Unknown error correction level `:a`", error.message
+    end.to raise_exception(QRCode::QRCodeArgumentError, message: be == "Unknown error correction level `:a`")
   end
 
-  def test_qrcode_runtime_error
-    error = assert_raises(QRCode::QRCodeRunTimeError) do
+  it "raises runtime error for invalid inputs" do
+    expect do
       QRCode::QRCode.new("duncan").checked?(0, 999999)
-    end
-    assert_equal "Invalid row/column pair: 0, 999999", error.message
+    end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "Invalid row/column pair: 0, 999999")
 
-    error = assert_raises(QRCode::QRCodeRunTimeError) do
+    expect do
       assert QRCode::QRCode.new("10000000000000000000", size: 1, level: :h)
-    end
-    assert_equal "code length overflow. (81>72). (Try a larger size!)", error.message
+    end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "code length overflow. (81>72). (Try a larger size!)")
 
-    error = assert_raises(QRCode::QRCodeRunTimeError) do
-      assert QRCode::QRUtil.get_mask(9, 1, 2)
-    end
-    assert_equal "bad mask_pattern: 9", error.message
+    expect do
+      QRCode::QRUtil.get_mask(9, 1, 2)
+    end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "bad mask_pattern: 9")
 
-    error = assert_raises(QRCode::QRCodeRunTimeError) do
+    expect do
       assert QRCode::QRUtil.get_length_in_bits(:duncan, 1)
-    end
-    assert_equal "Unknown mode: duncan", error.message
+    end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "Unknown mode: duncan")
 
-    error = assert_raises(QRCode::QRCodeRunTimeError) do
+    expect do
       assert QRCode::QRUtil.get_length_in_bits(1 << 0, 41)
-    end
-    assert_equal "Unknown version: 41", error.message
+    end.to raise_exception(QRCode::QRCodeRunTimeError, message: be == "Unknown version: 41")
   end
 
-  def test_H_
+  it "creates a QR code with level H" do
     qr = QRCode::QRCode.new("duncan", size: 1)
 
-    assert_equal qr.modules.size, 21
-    assert_equal qr.modules, MATRIX_1_H
+    expect(qr.modules.size).to be == 21
+    expect(qr.modules).to be == MATRIX_1_H
 
     qr = QRCode::QRCode.new("duncan", size: 1)
-    assert_equal qr.modules, MATRIX_1_H
+    expect(qr.modules).to be == MATRIX_1_H
     qr = QRCode::QRCode.new("duncan", size: 1, level: :l)
-    assert_equal qr.modules, MATRIX_1_L
+    expect(qr.modules).to be == MATRIX_1_L
     qr = QRCode::QRCode.new("duncan", size: 1, level: :m)
-    assert_equal qr.modules, MATRIX_1_M
+    expect(qr.modules).to be == MATRIX_1_M
     qr = QRCode::QRCode.new("duncan", size: 1, level: :q)
-    assert_equal qr.modules, MATRIX_1_Q
+    expect(qr.modules).to be == MATRIX_1_Q
   end
 
-  def test_3_H_
+  it "creates a QR code with level H and size 3" do
     qr = QRCode::QRCode.new("duncan", size: 3)
 
-    assert_equal qr.modules.size, 29
-    assert_equal qr.modules, MATRIX_3_H
+    expect(qr.modules.size).to be == 29
+    expect(qr.modules).to be == MATRIX_3_H
   end
 
-  def test_5_H_
+  it "creates a QR code with level H and size 5" do
     qr = QRCode::QRCode.new("duncan", size: 5)
 
-    assert_equal qr.modules.size, 37
-    assert_equal qr.modules, MATRIX_5_H
+    expect(qr.modules.size).to be == 37
+    expect(qr.modules).to be == MATRIX_5_H
   end
 
-  def test_10_H_
+  it "creates a QR code with level H and size 10" do
     qr = QRCode::QRCode.new("duncan", size: 10)
 
-    assert_equal qr.modules.size, 57
-    assert_equal qr.modules, MATRIX_10_H
+    expect(qr.modules.size).to be == 57
+    expect(qr.modules).to be == MATRIX_10_H
   end
 
-  def test_4_H_
+  it "creates a QR code with level H and size 4" do
     qr = QRCode::QRCode.new("www.bbc.co.uk/programmes/b0090blw", level: :l, size: 4)
-    assert_equal qr.modules, MATRIX_4_L
+    expect(qr.modules).to be == MATRIX_4_L
     qr = QRCode::QRCode.new("www.bbc.co.uk/programmes/b0090blw", level: :m, size: 4)
-    assert_equal qr.modules, MATRIX_4_M
+    expect(qr.modules).to be == MATRIX_4_M
     qr = QRCode::QRCode.new("www.bbc.co.uk/programmes/b0090blw", level: :q, size: 4)
-    assert_equal qr.modules, MATRIX_4_Q
+    expect(qr.modules).to be == MATRIX_4_Q
 
     qr = QRCode::QRCode.new("www.bbc.co.uk/programmes/b0090blw")
-    assert_equal qr.modules.size, 33
-    assert_equal qr.modules, MATRIX_4_H
+    expect(qr.modules.size).to be == 33
+    expect(qr.modules).to be == MATRIX_4_H
   end
 
-  def test_to_s
+  it "creates a QR code with level H and size 1" do
     qr = QRCode::QRCode.new("duncan", size: 1)
-    assert_equal "xxxxxxx xx x  xxxxxxx\n", qr.to_s[0..21]
-    assert_equal "qqqqqqqnqqnqnnqqqqqqq\n", qr.to_s(dark: "q", light: "n")[0..21]
-    assert_equal "@@@@@@@ @@ @  @@@@@@@\n", qr.to_s(dark: "@")[0..21]
+    expect(qr.to_s[0..21]).to be == "xxxxxxx xx x  xxxxxxx\n"
+    expect(qr.to_s(dark: "q", light: "n")[0..21]).to be == "qqqqqqqnqqnqnnqqqqqqq\n"
+    expect(qr.to_s(dark: "@")[0..21]).to be == "@@@@@@@ @@ @  @@@@@@@\n"
   end
 
-  def test_auto_alphanumeric
+  it "creates a QR code with level H and size 1" do
     # Overflowws without the alpha version
-    assert QRCode::QRCode.new("1234567890", size: 1, level: :h)
+    QRCode::QRCode.new("1234567890", size: 1, level: :h)
 
     qr = QRCode::QRCode.new("DUNCAN", size: 1, level: :h)
-    assert_equal "xxxxxxx xxx   xxxxxxx\n", qr.to_s[0..21]
+    expect(qr.to_s[0..21]).to be == "xxxxxxx xxx   xxxxxxx\n"
   end
 
-  def test_manual_alphanumeric
-    assert_equal :mode_alpha_numk, QRCode::QRCode.new("DUNCAN", mode: :alphanumeric).mode
+  it "creates a QR code with level H and size 1" do
+    expect(QRCode::QRCode.new("DUNCAN", mode: :alphanumeric).mode).to be == :mode_alpha_numk
 
-    assert_raises(QRCode::QRCodeArgumentError) {
+    expect do
       QRCode::QRCode.new("Duncan", mode: :alphanumeric)
-    }
+    end.to raise_exception(QRCode::QRCodeArgumentError)
   end
 
-  def test_auto_numeric
+  it "automatically uses numeric mode" do
     # When digit only automatically uses numeric mode, default ecc level is :h
     digits = QRCode::QRCode.new("1" * 17) # Version 1, numeric mode, ECC h
-    assert_equal 1, digits.version
-    assert_equal :mode_number, digits.mode
-    assert_equal :h, digits.error_correction_level
+    expect(digits.version).to be == 1
+    expect(digits.mode).to be == :mode_number
+    expect(digits.error_correction_level).to be == :h
     # When alpha automatically works
     alpha = QRCode::QRCode.new("X" * 10) # Version 1, alpha mode, ECC h
-    assert_equal 1, alpha.version
-    assert_equal :mode_alpha_numk, alpha.mode
-    assert_equal :h, alpha.error_correction_level
+    expect(alpha.version).to be == 1
+    expect(alpha.mode).to be == :mode_alpha_numk
+    expect(alpha.error_correction_level).to be == :h
     # Generic should use binary
     binary = QRCode::QRCode.new("x" * 7) # Version 1, 8bit mode, ECC h
-    assert_equal 1, binary.version
-    assert_equal :mode_8bit_byte, binary.mode
-    assert_equal :h, binary.error_correction_level
+    expect(binary.version).to be == 1
+    expect(binary.mode).to be == :mode_8bit_byte
+    expect(binary.error_correction_level).to be == :h
   end
 
-  def test_numeric_2_M
+  it "creates a QR code with level H and size 2" do
     data = "279042272585972554922067893753871413584876543211601021503002"
 
     qr = QRCode::QRCode.new(data, size: 2, level: :m, mode: :number)
-    assert_equal "xxxxxxx   x x x   xxxxxxx\n", qr.to_s[0..25]
+    expect(qr.to_s[0..25]).to be == "xxxxxxx   x x x   xxxxxxx\n"
   end
 
-  def test_rszf_error_not_thrown
-    assert QRCode::QRCode.new("2 1058 657682")
-    assert QRCode::QRCode.new("40952", size: 1, level: :h)
-    assert QRCode::QRCode.new("40932", size: 1, level: :h)
-    assert QRCode::QRCode.new("", size: 1, level: :h)
-    assert QRCode::QRCode.new("0", size: 1, level: :h)
+  it "does not throw an error for valid inputs" do
+    QRCode::QRCode.new("2 1058 657682")
+    QRCode::QRCode.new("40952", size: 1, level: :h)
+    QRCode::QRCode.new("40932", size: 1, level: :h)
+    QRCode::QRCode.new("", size: 1, level: :h)
+    QRCode::QRCode.new("0", size: 1, level: :h)
   end
 
-  def test_exceed_max_size
-    assert_raises QRCode::QRCodeArgumentError do
+  it "raises an error for exceeding max size" do
+    expect do
       QRCode::QRCode.new("duncan", size: 41)
-    end
+    end.to raise_exception(QRCode::QRCodeArgumentError)
   end
 
-  def test_error_correction_level
+  it "returns the error correction level" do
     # attr_reader was wrong
-    assert_equal QRCode::QRCode.new("a", level: :h).error_correction_level, :h
+    expect(QRCode::QRCode.new("a", level: :h).error_correction_level).to be == :h
   end
 
-  def test_version_table
+  it "returns the version table" do
     # tables in QRCode::QRCode::QRMAXBITS wasn't updated to support greater versions
-    assert_equal QRCode::QRCode.new("1" * 289, level: :h, mode: :number).version, 11
-    assert_equal QRCode::QRCode.new("A" * 175, level: :h, mode: :alphanumeric).version, 11
-    assert_equal QRCode::QRCode.new("a" * 383, level: :h, mode: :byte_8bit).version, 21
+    expect(QRCode::QRCode.new("1" * 289, level: :h, mode: :number).version).to be == 11
+    expect(QRCode::QRCode.new("A" * 175, level: :h, mode: :alphanumeric).version).to be == 11
+    expect(QRCode::QRCode.new("a" * 383, level: :h, mode: :byte_8bit).version).to be == 21
   end
 
-  def test_levels
-    assert QRCode::QRCode.new("duncan", level: :l)
-    assert QRCode::QRCode.new("duncan", level: :m)
-    assert QRCode::QRCode.new("duncan", level: :q)
-    assert QRCode::QRCode.new("duncan", level: :h)
+  it "returns the levels" do
+    QRCode::QRCode.new("duncan", level: :l)
+    QRCode::QRCode.new("duncan", level: :m)
+    QRCode::QRCode.new("duncan", level: :q)
+    QRCode::QRCode.new("duncan", level: :h)
 
     %w[a b c d e f g i j k n o p r s t u v w x y z].each do |ltr|
-      assert_raises(QRCode::QRCodeArgumentError) {
+      expect do
         QRCode::QRCode.new("duncan", level: ltr.to_sym)
-      }
+      end.to raise_exception(QRCode::QRCodeArgumentError)
     end
   end
 
-  def test_utf8
+  it "supports UTF-8" do
     qr = QRCode::QRCode.new("тест")
-    assert_equal qr.modules, MATRIX_UTF8_RU_TEST
+    expect(qr.modules).to be == MATRIX_UTF8_RU_TEST
   end
 
-  def test_large_integer
+  it "supports large integers" do
     QRCode::QRCode.new((1 << 64).to_s, mode: :number)
     QRCode::QRCode.new(((1 << 64) + 1).to_s, mode: :number)
-  rescue => e
-    flunk(e)
+  end
+
+  it "handles code length overflows" do
+    QRCode::QRCode.new("s" * 220)
+    QRCode::QRCode.new("s" * 195)
   end
 end
