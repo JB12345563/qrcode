@@ -1,34 +1,22 @@
 # QRCode
 
-This is a fork of [`rqrcode_core`](https://github.com/whomwah/rqrcode_core), which was originally adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator).
+A pure Ruby library for generating QR codes with multiple output formats. Generate QR codes as text art for terminal display or as scalable SVG graphics for web and print applications.
 
-Features:
-
-  - `rqrcode_core` is a Ruby only library. It requires no 3rd party libraries. Just Ruby\!
-  - It is an encoding library. You can't decode QR Codes with it.
-  - The interface is simple and assumes you just want to encode a string into a QR Code, but also allows for encoding multiple segments.
-  - QR Code is trademarked by Denso Wave inc.
-  - Minimum Ruby version is `>= 3.0.0`
-
-`rqrcode_core` is the basis of the popular `rqrcode` gem \[https://github.com/whomwah/rqrcode\]. This gem allows you to generate different renderings of your QR Code, including `png`, `svg` and `ansi`.
+This is a fork of [`rqrcode_core`](https://github.com/whomwah/rqrcode_core), which was originally 
+  adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase/
+  qrcode-generator).
 
 [![Development Status](https://github.com/socketry/qrcode/workflows/Test/badge.svg)](https://github.com/socketry/qrcode/actions?workflow=Test)
 
-## Installation
+## Features
 
-Add this line to your application's Gemfile:
-
-``` ruby
-gem "rqrcode_core"
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install rqrcode_core
+- **Pure Ruby**: No external dependencies, works with any Ruby application.
+- **Multiple Output Formats**: Text (Unicode blocks) and SVG output built-in.
+- **Automatic Optimization**: Intelligently selects the most efficient encoding (numeric, alphanumeric, or binary).
+- **Error Correction**: Full support for all four standardized error correction levels (L, M, Q, H).
+- **Multi-Segment Encoding**: Optimize large data by mixing encoding modes in a single QR code.
+- **Command Line Tools**: Bake tasks for generating QR codes from the terminal.
+- **Standards Compliant**: Follows ISO/IEC 18004 QR Code specification.
 
 ## Usage
 
