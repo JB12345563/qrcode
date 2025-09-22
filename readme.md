@@ -2,6 +2,8 @@
 
 A pure Ruby library for generating QR codes with multiple output formats. Generate QR codes as text art for terminal display or as scalable SVG graphics for web and print applications.
 
+![QR Code Example](output.svg)
+
 This is a fork of [`rqrcode_core`](https://github.com/whomwah/rqrcode_core), which was originally adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator).
 
 [![Development Status](https://github.com/socketry/qrcode/workflows/Test/badge.svg)](https://github.com/socketry/qrcode/actions?workflow=Test)
