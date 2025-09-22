@@ -2,21 +2,21 @@
 
 A pure Ruby library for generating QR codes with multiple output formats. Generate QR codes as text art for terminal display or as scalable SVG graphics for web and print applications.
 
-This is a fork of [`rqrcode_core`](https://github.com/whomwah/rqrcode_core), which was originally 
-  adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase/
-  qrcode-generator).
+This is a fork of [`rqrcode_core`](https://github.com/whomwah/rqrcode_core), which was originally
+adapted in 2008 from a Javascript library by \[Kazuhiko Arase\](https://github.com/kazuhikoarase/
+qrcode-generator).
 
 [![Development Status](https://github.com/socketry/qrcode/workflows/Test/badge.svg)](https://github.com/socketry/qrcode/actions?workflow=Test)
 
 ## Features
 
-- **Pure Ruby**: No external dependencies, works with any Ruby application.
-- **Multiple Output Formats**: Text (Unicode blocks) and SVG output built-in.
-- **Automatic Optimization**: Intelligently selects the most efficient encoding (numeric, alphanumeric, or binary).
-- **Error Correction**: Full support for all four standardized error correction levels (L, M, Q, H).
-- **Multi-Segment Encoding**: Optimize large data by mixing encoding modes in a single QR code.
-- **Command Line Tools**: Bake tasks for generating QR codes from the terminal.
-- **Standards Compliant**: Follows ISO/IEC 18004 QR Code specification.
+  - **Pure Ruby**: No external dependencies, works with any Ruby application.
+  - **Multiple Output Formats**: Text (Unicode blocks) and SVG output built-in.
+  - **Automatic Optimization**: Intelligently selects the most efficient encoding (numeric, alphanumeric, or binary).
+  - **Error Correction**: Full support for all four standardized error correction levels (L, M, Q, H).
+  - **Multi-Segment Encoding**: Optimize large data by mixing encoding modes in a single QR code.
+  - **Command Line Tools**: Bake tasks for generating QR codes from the terminal.
+  - **Standards Compliant**: Follows ISO/IEC 18004 QR Code specification.
 
 ## Usage
 
@@ -28,7 +28,18 @@ Please see the [project documentation](https://socketry.github.io/qrcode/) for m
 
 Please see the [project releases](https://socketry.github.io/qrcode/releases/index) for all releases.
 
-### Unreleased
+### v0.1.0
+
+  - **Breaking**: Complete refactor of encoder architecture with cleaner segment-based design.
+  - **Breaking**: Renamed `RSBlock` to `ErrorCorrectionBlock` with cleaner method names (`for`, `table_entry_for`).
+  - **Breaking**: Simplified `Code` constructor to take segments array, added `Code.build()` factory method.
+  - **Breaking**: Removed redundant `Multi` class - multi-segment support now built into `Code` directly.
+  - Added self-contained segment classes: `Segment`, `NumericSegment`, `AlphanumericSegment`.
+  - Added comprehensive test coverage for output functionality (Text and SVG).
+  - Added `size` alias for `module_count` for cleaner API.
+  - Added proper documentation explaining error correction level encoding from ISO/IEC 18004.
+  - Improved code organization with `QRCode::Encoder` namespace for all encoding classes.
+  - Removed QR prefix from encoder file and class names for cleaner codebase.
 
 ## Contributing
 

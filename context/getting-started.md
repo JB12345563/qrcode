@@ -14,9 +14,9 @@ $ bundle add qrcode
 
 `qrcode` provides a simple and flexible way to generate QR codes with multiple output formats:
 
-- Text output using Unicode block characters for terminal display
-- SVG output for scalable vector graphics
-- Multiple error correction levels (L, M, Q, H) for different damage tolerance requirements
+- Text output using Unicode block characters for terminal display.
+- SVG output for scalable vector graphics.
+- Multiple error correction levels (L, M, Q, H) for different damage tolerance requirements.
 
 ## Usage
 
@@ -111,10 +111,7 @@ The project includes bake tasks for command-line QR code generation:
 $ bake qrcode:text "Hello World"
 
 # Generate SVG QR code
-$ bake qrcode:svg "Hello World"
-
-# Save SVG to file
-$ bake qrcode:save "Hello World" output.svg
+$ bake qrcode:svg "Hello World" > output.svg
 ```
 
 ## Advanced Usage
@@ -126,9 +123,9 @@ For optimal encoding of mixed data types, you can create multi-segment QR codes:
 ```ruby
 # Optimize encoding by using different modes for different parts
 multi_data = [
-		{data: "12345", mode: :numeric},
-		{data: "HELLO", mode: :alphanumeric}, 
-		{data: "world!", mode: :binary}
+	{data: "12345", mode: :numeric},
+	{data: "HELLO", mode: :alphanumeric}, 
+	{data: "world!", mode: :binary}
 ]
 
 qr_code = QRCode.text(multi_data)
