@@ -7,8 +7,11 @@ Gem::Specification.new do |spec|
 	spec.version = QRCode::VERSION
 	
 	spec.summary = "A library to encode QR Codes"
-	spec.authors = ["Duncan Robertson", "Björn Blomqvist", "Gioele Barabucci", "Sam Sayer", "Fabio Napoleoni", "xn", "Samuel Williams", "Tonči Damjanić", "Bjorn Blomqvist", "Christopher Lord", "Andreas Finger", "Andy Brody", "James Neal", "Jon Evans", "Marcos Piccinini", "Yauhen Kharuzhy", "Bart Jedrocha", "Chris Mowforth", "Christian Campbell", "Daniel Schierbeck", "Ferdinand Rosario", "Jeremy Evans", "José Luis Honorato", "Ken Collins", "Masataka Pocke Kuwabara", "Matt Rohrer", "Nathaniel Roman", "Nicolò Gnudi", "Sean Doig", "Simon Males", "Simon Schrape", "Thibaut Barrère", "Tore Darell", "dependabot[bot]"]
+	spec.authors = ["Duncan Robertson", "Björn Blomqvist", "Gioele Barabucci", "Sam Sayer", "Samuel Williams", "Fabio Napoleoni", "xn", "Tonči Damjanić", "Bjorn Blomqvist", "Christopher Lord", "Andreas Finger", "Andy Brody", "James Neal", "Jon Evans", "Marcos Piccinini", "Yauhen Kharuzhy", "Bart Jedrocha", "Chris Mowforth", "Christian Campbell", "Daniel Schierbeck", "Ferdinand Rosario", "Jeremy Evans", "José Luis Honorato", "Ken Collins", "Masataka Pocke Kuwabara", "Matt Rohrer", "Nathaniel Roman", "Nicolò Gnudi", "Sean Doig", "Simon Males", "Simon Schrape", "Thibaut Barrère", "Tore Darell", "dependabot[bot]"]
 	spec.license = "MIT"
+	
+	spec.cert_chain  = ["release.cert"]
+	spec.signing_key = File.expand_path("~/.gem/release.pem")
 	
 	spec.homepage = "https://github.com/socketry/qrcode"
 	
