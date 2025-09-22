@@ -27,8 +27,8 @@ module QRCode
 			end
 			
 			def get(index)
-				buf_index = (index / 8).floor
-				(Encoder::Util.rszf(@buffer[buf_index], 7 - index % 8) & 1) == 1
+				byte_index = (index / 8).floor
+				(Encoder::Util.rszf(@buffer[byte_index], 7 - index % 8) & 1) == 1
 			end
 			
 			def put(num, length)
@@ -42,13 +42,13 @@ module QRCode
 			end
 			
 			def put_bit(bit)
-				buf_index = (@length / 8).floor
-				if @buffer.size <= buf_index
+				byte_index = (@length / 8).floor
+				if @buffer.size <= byte_index
 					@buffer << 0
 				end
 				
 				if bit
-					@buffer[buf_index] |= Encoder::Util.rszf(0x80, @length % 8)
+					@buffer[byte_index] |= Encoder::Util.rszf(0x80, @length % 8)
 				end
 				
 				@length += 1
