@@ -1,6 +1,6 @@
 # QRCode
 
-`rqrcode_core` is a library for encoding QR Codes in pure Ruby. It has a simple interface with all the standard qrcode options. It was originally adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase).
+This is a fork of [`rqrcode_core`](https://github.com/whomwah/rqrcode_core), which was originally adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator).
 
 Features:
 
@@ -30,104 +30,17 @@ Or install it yourself as:
 
     $ gem install rqrcode_core
 
-## Basic Usage
+## Usage
 
-``` ruby
-require "rqrcode_core"
-qr = QRCode::Encoder::Code.new("https://kyan.com")
-puts qr.to_s
-```
+Please see the [project documentation](https://socketry.github.io/qrcode/) for more details.
 
-Output:
-
-    xxxxxxx x  x x   x x  xx  xxxxxxx
-    x     x  xxx  xxxxxx xxx  x     x
-    x xxx x  xxxxx x       xx x xxx x
-    ... etc
-
-## Multiple Encoding Support
-
-``` ruby
-require "rqrcode_core"
-qr = QRCode::Encoder::Code.new([
-	{data: "byteencoded", mode: :byte_8bit},
-	{data: "A1" * 100, mode: :alphanumeric},
-	{data: "1" * 500, mode: :number}
-])
-```
-
-This will create a QR Code with byte encoded, alphanumeric and number segments. Any combination of encodings/segments will work provided it fits within size limits.
-
-## Doing your own rendering
-
-``` ruby
-require "rqrcode_core"
-
-qr = QRCode::Encoder::Code.new("https://kyan.com")
-qr.modules.each do |row|
-	row.each do |col|
-		print col ? "#" : " "
-	end
-	
-	print "\n"
-end
-```
-
-### Options
-
-The library expects a string or array (for multiple encodings) to be parsed in, other args are optional.
-
-    data - the string or array you wish to encode
-    
-    size - the size (integer) of the QR Code (defaults to smallest size needed to encode the string)
-    
-    max_size - the max_size (Integer) of the QR Code (default QRCode::Encoder::Util.max_size)
-    
-    level  - the error correction level, can be:
-      * Level :l 7%  of code can be restored
-      * Level :m 15% of code can be restored
-      * Level :q 25% of code can be restored
-      * Level :h 30% of code can be restored (default :h)
-    
-    mode - the mode of the QR Code (defaults to alphanumeric or byte_8bit, depending on the input data, only used when data is a string):
-      * :number
-      * :alphanumeric
-      * :byte_8bit
-
-#### Example
-
-``` ruby
-QRCode::Encoder::Code.new("http://kyan.com", size: 2, level: :m, mode: :byte_8bit)
-```
-
-## Development
-
-### Tests
-
-You can run the test suite using:
-
-    $ ./bin/setup
-    $ rake
-
-or try the project from the console with:
-
-    $ ./bin/console
-
-### Linting
-
-The project uses [standardrb](https://github.com/testdouble/standard) and can be run with:
-
-    $ ./bin/setup
-    $ rake standard # check
-    $ rake standard:fix # fix
-
-## Experimental
-
-On 64 bit systems when generating lots of QR Codes the lib will consume more memory than on a 32 bit systems during the internal "right shift zero fill" steps (this is expected). In tests though, it's shown that by forcing the lib to think you're on a 32 systems greatly reduces the memory footprint. This could of course have undesired consequences too\! but if you're happy to try, you can use the `RQRCODE_CORE_ARCH_BITS` ENV to make this change. e.g `RQRCODE_CORE_ARCH_BITS=32`.
+  - [Getting Started](https://socketry.github.io/qrcode/guides/getting-started/index) - This guide explains how to get started with `qrcode` to generate QR codes in Ruby.
 
 ## Releases
 
-There are no documented releases.
+Please see the [project releases](https://socketry.github.io/qrcode/releases/index) for all releases.
+
+### Unreleased
 
 ## Contributing
 
