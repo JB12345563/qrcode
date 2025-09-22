@@ -1,36 +1,25 @@
-lib = File.expand_path("../lib", __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "qrcode/version"
+# frozen_string_literal: true
+
+require_relative "lib/qrcode/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "qrcode"
-  spec.version = QRCode::VERSION
-  spec.platform = Gem::Platform::RUBY
-  spec.authors = ["Duncan Robertson"]
-  spec.email = ["duncan@whomwah.com"]
-
-  spec.summary = "A library to encode QR Codes"
-  spec.description = <<~EOF
-    rqrcode_core is a Ruby library for encoding QR Codes. The simple
-    interface (with no runtime dependencies) allows you to create QR Code data structures.
-  EOF
-  spec.homepage = "https://github.com/whomwah/rqrcode_core"
-  spec.license = "MIT"
-  spec.metadata = {
-    "bug_tracker_uri" => "https://github.com/whomwah/rqrcode_core/issues",
-    "changelog_uri" => "https://github.com/whomwah/rqrcode_core/blob/main/CHANGELOG.md"
-  }
-
-  spec.files = Dir.chdir(File.expand_path("..", __FILE__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  end
-  spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
-
-  spec.required_ruby_version = "~> 3.0"
-  spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "minitest", "~> 5.0"
-  spec.add_development_dependency "standard", "~> 1.41"
+	spec.name = "qrcode"
+	spec.version = QRCode::VERSION
+	
+	spec.summary = "A library to encode QR Codes"
+	spec.authors = ["Duncan Robertson", "Björn Blomqvist", "Gioele Barabucci", "Sam Sayer", "Fabio Napoleoni", "xn", "Tonči Damjanić", "Bjorn Blomqvist", "Christopher Lord", "Samuel Williams", "Andreas Finger", "Andy Brody", "James Neal", "Jon Evans", "Marcos Piccinini", "Yauhen Kharuzhy", "Bart Jedrocha", "Chris Mowforth", "Christian Campbell", "Daniel Schierbeck", "Ferdinand Rosario", "Jeremy Evans", "José Luis Honorato", "Ken Collins", "Masataka Pocke Kuwabara", "Matt Rohrer", "Nathaniel Roman", "Nicolò Gnudi", "Sean Doig", "Simon Males", "Simon Schrape", "Thibaut Barrère", "Tore Darell", "dependabot[bot]"]
+	spec.license = "MIT"
+	
+	spec.homepage = "https://github.com/whomwah/rqrcode_core"
+	
+	spec.metadata = {
+		"bug_tracker_uri" => "https://github.com/whomwah/rqrcode_core/issues",
+		"changelog_uri" => "https://github.com/whomwah/rqrcode_core/blob/main/CHANGELOG.md",
+		"funding_uri" => "https://github.com/sponsors/whomwah/",
+		"source_code_uri" => "https://github.com/whomwah/rqrcode_core.git",
+	}
+	
+	spec.files = Dir.glob(["{.github,bin,fixtures,lib}/**/*", "*.md"], File::FNM_DOTMATCH, base: __dir__)
+	
+	spec.required_ruby_version = ">= 3.2"
 end

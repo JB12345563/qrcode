@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
-module QRCode
-  class QRMulti
-    def initialize(data)
-      @data = data
-    end
+# Released under the MIT License.
+# Copyright, 2021, by Sam Sayer.
+# Copyright, 2021, by Duncan Robertson.
+# Copyright, 2025, by Samuel Williams.
 
-    def write(buffer)
-      @data.each { |seg| seg.writer.write(buffer) }
-    end
-  end
+module QRCode
+	class QRMulti
+		def initialize(data)
+			@data = data
+		end
+		
+		def write(buffer)
+			@data.each {|seg| seg.writer.write(buffer)}
+		end
+	end
 end
