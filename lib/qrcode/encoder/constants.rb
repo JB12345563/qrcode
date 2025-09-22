@@ -19,11 +19,22 @@ module QRCode
 			multi: :mode_multi
 		}.freeze
 		
-		ERROR_CORRECT_LEVEL = {
-			l: 1,
-			m: 0,
-			q: 3,
-			h: 2
+		# Error correction levels as defined in ISO/IEC 18004 QR Code specification
+		# These exact numeric values are encoded in the format information of every QR code
+		# and are standardized across all QR code implementations worldwide.
+		#
+		# The seemingly random order (1,0,3,2) represents the official 2-bit binary encoding:
+		#   L = 01 binary = 1 decimal (~7% error correction)
+		#   M = 00 binary = 0 decimal (~15% error correction) 
+		#   Q = 11 binary = 3 decimal (~25% error correction)
+		#   H = 10 binary = 2 decimal (~30% error correction)
+		#
+		# These values MUST NOT be changed as they are part of the global QR Code standard.
+		ERROR_CORRECTION_LEVEL = {
+			l: 1,  # Low - ~7% of codewords can be restored
+			m: 0,  # Medium - ~15% of codewords can be restored  
+			q: 3,  # Quartile - ~25% of codewords can be restored
+			h: 2   # High - ~30% of codewords can be restored
 		}.freeze
 		
 		MASK_PATTERN = {

@@ -21,7 +21,7 @@ require_relative "math"
 require_relative "polynomial"
 require_relative "util"
 require_relative "bit_buffer"
-require_relative "rs_block"
+require_relative "error_correction_block"
 require_relative "segment"
 
 module QRCode
@@ -58,9 +58,9 @@ module QRCode
 			# @parameter max_size [Integer] Maximum allowed version
 			def initialize(segments, level: :h, size: nil, max_size: nil)
 				@segments = Array(segments)
-				@error_correct_level = ERROR_CORRECT_LEVEL[level]
+				@error_correction_level = ERROR_CORRECTION_LEVEL[level]
 				
-				unless @error_correct_level
+				unless @error_correction_level
 					raise ArgumentError, "Unknown error correction level `#{level.inspect}`"
 				end
 				
@@ -135,15 +135,15 @@ module QRCode
 			# Public overide as default inspect is very verbose
 			#
 			#  QRCode::Encoder::Code.new('my string to generate', size: 4, level: :h)
-			#  => QRCodeCore: @data='my string to generate', @error_correct_level=2, @version=4, @module_count=33
+			#  => QRCodeCore: @data='my string to generate', @error_correction_level=2, @version=4, @module_count=33
 			#
 			def inspect
-				"QRCodeCore: @segments=#{@segments.size} segments, @error_correct_level=#{@error_correct_level}, @version=#{@version}, @module_count=#{@module_count}"
+				"QRCodeCore: @segments=#{@segments.size} segments, @error_correction_level=#{@error_correction_level}, @version=#{@version}, @module_count=#{@module_count}"
 			end
 			
 			# Return a symbol for current error connection level
 			def error_correction_level
-				ERROR_CORRECT_LEVEL.invert[@error_correct_level]
+				ERROR_CORRECTION_LEVEL.invert[@error_correction_level]
 			end
 			
 			# Return true if this QR Code includes multiple encoded segments
@@ -185,7 +185,7 @@ module QRCode
 				
 				if @data_cache.nil?
 					@data_cache = Code.create_data(
-						@version, @error_correct_level, @segments
+						@version, @error_correction_level, @segments
 					)
 				end
 				
@@ -259,7 +259,7 @@ module QRCode
 			end
 			
 			def place_format_info(test, mask_pattern) # :nodoc:
-				data = (@error_correct_level << 3 | mask_pattern)
+				data = (@error_correction_level << 3 | mask_pattern)
 				bits = Encoder::Util.get_bch_format_info(data)
 				
 				FORMAT_INFO_LENGTH.times do |i|
@@ -354,8 +354,8 @@ module QRCode
 					max_data_bytes * 8
 				end
 				
-				def create_data(version, error_correct_level, segments) # :nodoc:
-					rs_blocks = Encoder::RSBlock.get_rs_blocks(version, error_correct_level)
+				def create_data(version, error_correction_level, segments) # :nodoc:
+					rs_blocks = Encoder::ErrorCorrectionBlock.for(version, error_correction_level)
 					max_data_bits = Code.count_max_data_bits(rs_blocks)
 					buffer = Encoder::BitBuffer.new(version)
 					

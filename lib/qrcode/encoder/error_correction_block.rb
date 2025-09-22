@@ -10,7 +10,7 @@ require_relative "constants"
 
 module QRCode
 	module Encoder
-		class RSBlock
+		class ErrorCorrectionBlock
 			attr_reader :data_count, :total_count
 			
 			def initialize(total_count, data_count)
@@ -19,7 +19,9 @@ module QRCode
 			end
 			
 			# http://www.thonky.com/qr-code-tutorial/error-correction-table/
-			RS_BLOCK_TABLE = [
+			# Table of [block_count, total_codewords, data_codewords] for each version and error level
+			TABLE = [
+				# The order within each group is:
 				# L
 				# M
 				# Q
@@ -266,39 +268,49 @@ module QRCode
 				[20, 45, 15, 61, 46, 16]
 			].freeze
 			
-			def self.get_rs_blocks(version, error_correct_level)
-				rs_block = Encoder::RSBlock.get_rs_block_table(version, error_correct_level)
+			# Create error correction blocks for given version and level
+			# @parameter version [Integer] QR code version (1-40)
+			# @parameter level [Integer] Error correction level
+			# @return [Array<ErrorCorrectionBlock>] Array of error correction blocks
+			def self.for(version, level)
+				entry = table_entry_for(version, level)
 				
-				if rs_block.nil?
-					raise RuntimeError, "bad rsblock @ version: #{version}/error_correct_level:#{error_correct_level}"
+				if entry.nil?
+					raise RuntimeError, "Invalid error correction configuration: version=#{version}, level=#{level}"
 				end
 				
-				length = rs_block.size / 3
-				list = []
+				blocks = []
+				groups = entry.size / 3
 				
-				(0...length).each do |i|
-					count = rs_block[i * 3 + 0]
-					total_count = rs_block[i * 3 + 1]
-					data_count = rs_block[i * 3 + 2]
+				(0...groups).each do |i|
+					count = entry[i * 3 + 0]
+					total_count = entry[i * 3 + 1]
+					data_count = entry[i * 3 + 2]
 					
-					(0...count).each do |j|
-						list << Encoder::RSBlock.new(total_count, data_count)
+					count.times do
+						blocks << ErrorCorrectionBlock.new(total_count, data_count)
 					end
 				end
 				
-				list
+				blocks
 			end
 			
-			def self.get_rs_block_table(version, error_correct_level)
-				case error_correct_level
-				when ERROR_CORRECT_LEVEL[:l]
-					Encoder::RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 0]
-				when ERROR_CORRECT_LEVEL[:m]
-					Encoder::RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 1]
-				when ERROR_CORRECT_LEVEL[:q]
-					Encoder::RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 2]
-				when ERROR_CORRECT_LEVEL[:h]
-					Encoder::RSBlock::RS_BLOCK_TABLE[(version - 1) * 4 + 3]
+			# Get table entry for specific version and error correction level
+			# @parameter version [Integer] QR code version (1-40)  
+			# @parameter level [Integer] Error correction level
+			# @return [Array] Table entry [block_count, total_codewords, data_codewords, ...]
+			def self.table_entry_for(version, level)
+				return nil unless version.between?(1, 40)
+				
+				case level
+				when ERROR_CORRECTION_LEVEL[:l]
+					TABLE[(version - 1) * 4 + 0]
+				when ERROR_CORRECTION_LEVEL[:m]
+					TABLE[(version - 1) * 4 + 1]
+				when ERROR_CORRECTION_LEVEL[:q]
+					TABLE[(version - 1) * 4 + 2]
+				when ERROR_CORRECTION_LEVEL[:h]
+					TABLE[(version - 1) * 4 + 3]
 				end
 			end
 		end
