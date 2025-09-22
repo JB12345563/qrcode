@@ -11,6 +11,10 @@
 # Copyright, 2021, by Sam Sayer.
 # Copyright, 2025, by Samuel Williams.
 
+require_relative "qr_constants"
+require_relative "qr_math"
+require_relative "qr_polynomial"
+
 module QRCode
 	class QRUtil
 		PATTERN_POSITION_TABLE = [

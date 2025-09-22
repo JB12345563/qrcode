@@ -16,68 +16,19 @@
 # Copyright, 2021, by Sam Sayer.
 # Copyright, 2025, by Samuel Williams.
 
+require_relative "qr_constants"
+require_relative "qr_math"
+require_relative "qr_polynomial"
+require_relative "qr_util"
+require_relative "qr_bit_buffer"
+require_relative "qr_numeric"
+require_relative "qr_alphanumeric"
+require_relative "qr_8bit_byte"
+require_relative "qr_multi"
+require_relative "qr_rs_block"
+require_relative "qr_segment"
+
 module QRCode
-	QRMODE = {
-		mode_number: 1 << 0,      # 1 (binary: 0001)
-		mode_alpha_numk: 1 << 1,  # 2 (binary: 0010)
-		mode_8bit_byte: 1 << 2    # 4 (binary: 0100)
-	}.freeze
-	
-	QRMODE_NAME = {
-		number: :mode_number,
-		alphanumeric: :mode_alpha_numk,
-		byte_8bit: :mode_8bit_byte,
-		multi: :mode_multi
-	}.freeze
-	
-	QRERRORCORRECTLEVEL = {
-		l: 1,
-		m: 0,
-		q: 3,
-		h: 2
-	}.freeze
-	
-	QRMASKPATTERN = {
-		pattern000: 0,
-		pattern001: 1,
-		pattern010: 2,
-		pattern011: 3,
-		pattern100: 4,
-		pattern101: 5,
-		pattern110: 6,
-		pattern111: 7
-	}.freeze
-	
-	QRMASKCOMPUTATIONS = [
-		proc {|i, j| (i + j) % 2 == 0},
-		proc {|i, j| i % 2 == 0},
-		proc {|i, j| j % 3 == 0},
-		proc {|i, j| (i + j) % 3 == 0},
-		proc {|i, j| ((i / 2).floor + (j / 3).floor) % 2 == 0},
-		proc {|i, j| (i * j) % 2 + (i * j) % 3 == 0},
-		proc {|i, j| ((i * j) % 2 + (i * j) % 3) % 2 == 0},
-		proc {|i, j| ((i * j) % 3 + (i + j) % 2) % 2 == 0}
-	].freeze
-	
-	QRPOSITIONPATTERNLENGTH = (7 + 1) * 2 + 1
-	QRFORMATINFOLENGTH = 15
-	
-	# http://web.archive.org/web/20110710094955/http://www.denso-wave.com/qrcode/vertable1-e.html
-	# http://web.archive.org/web/20110710094955/http://www.denso-wave.com/qrcode/vertable2-e.html
-	# http://web.archive.org/web/20110710094955/http://www.denso-wave.com/qrcode/vertable3-e.html
-	# http://web.archive.org/web/20110710094955/http://www.denso-wave.com/qrcode/vertable4-e.html
-	QRMAXBITS = {
-		l: [152, 272, 440, 640, 864, 1088, 1248, 1552, 1856, 2192, 2592, 2960, 3424, 3688, 4184, 4712, 5176, 5768, 6360, 6888, 7456, 8048, 8752, 9392, 10_208, 10_960, 11_744, 12_248, 13_048, 13_880, 14_744, 15_640, 16_568, 17_528, 18_448, 19_472, 20_528, 21_616, 22_496, 23_648],
-		m: [128, 224, 352, 512, 688, 864, 992, 1232, 1456, 1728, 2032, 2320, 2672, 2920, 3320, 3624, 4056, 4504, 5016, 5352, 5712, 6256, 6880, 7312, 8000, 8496, 9024, 9544, 10_136, 10_984, 11_640, 12_328, 13_048, 13_800, 14_496, 15_312, 15_936, 16_816, 17_728, 18_672],
-		q: [104, 176, 272, 384, 496, 608, 704, 880, 1056, 1232, 1440, 1648, 1952, 2088, 2360, 2600, 2936, 3176, 3560, 3880, 4096, 4544, 4912, 5312, 5744, 6032, 6464, 6968, 7288, 7880, 8264, 8920, 9368, 9848, 10288, 10832, 11408, 12016, 12656, 13328],
-		h: [72, 128, 208, 288, 368, 480, 528, 688, 800, 976, 1120, 1264, 1440, 1576, 1784, 2024, 2264, 2504, 2728, 3080, 3248, 3536, 3712, 4112, 4304, 4768, 5024, 5288, 5608, 5960, 6344, 6760, 7208, 7688, 7888, 8432, 8768, 9136, 9776, 10_208]
-	}.freeze
-	
-	# StandardErrors
-	
-	class QRCodeArgumentError < ArgumentError; end
-	
-	class QRCodeRunTimeError < RuntimeError; end
 	
 	# == Creation
 	#

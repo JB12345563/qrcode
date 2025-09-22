@@ -9,6 +9,9 @@
 # Copyright, 2020, by Nathaniel Roman.
 # Copyright, 2025, by Samuel Williams.
 
+require_relative "qr_constants"
+require_relative "qr_util"
+
 module QRCode
 	class QRBitBuffer
 		attr_reader :buffer

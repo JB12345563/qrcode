@@ -5,6 +5,13 @@
 # Copyright, 2021-2025, by Duncan Robertson.
 # Copyright, 2025, by Samuel Williams.
 
+require_relative "qr_constants"
+require_relative "qr_numeric"
+require_relative "qr_alphanumeric"
+require_relative "qr_multi"
+require_relative "qr_8bit_byte"
+require_relative "qr_util"
+
 module QRCode
 	class QRSegment
 		attr_reader :data, :mode

@@ -4,6 +4,8 @@
 # Copyright, 2008-2021, by Duncan Robertson.
 # Copyright, 2025, by Samuel Williams.
 
+require_relative "qr_math"
+
 module QRCode
 	class QRPolynomial
 		def initialize(num, shift)

@@ -6,6 +6,8 @@
 # Copyright, 2015, by Björn Blomqvist.
 # Copyright, 2025, by Samuel Williams.
 
+require_relative "qr_constants"
+
 module QRCode
 	class QRRSBlock
 		attr_reader :data_count, :total_count
