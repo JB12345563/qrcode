@@ -1,7 +1,7 @@
 ![](https://github.com/whomwah/rqrcode_core/actions/workflows/ruby.yml/badge.svg)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 
-# RQRCodeCore
+# QRCode
 
 `rqrcode_core` is a library for encoding QR Codes in pure Ruby. It has a simple interface with all the standard qrcode options. It was originally adapted in 2008 from a Javascript library by [Kazuhiko Arase](https://github.com/kazuhikoarase).
 
@@ -35,7 +35,7 @@ Or install it yourself as:
 
 ```ruby
 $ require "rqrcode_core"
-$ qr = RQRCodeCore::QRCode.new("https://kyan.com")
+$ qr = QRCode::QRCode.new("https://kyan.com")
 $ puts qr.to_s
 ```
 
@@ -52,7 +52,7 @@ x xxx x  xxxxx x       xx x xxx x
 
 ```ruby
 $ require "rqrcode_core"
-$ qr = RQRCodeCore::QRCode.new([
+$ qr = QRCode::QRCode.new([
   {data: "byteencoded", mode: :byte_8bit},
   {data: "A1" * 100, mode: :alphanumeric},
   {data: "1" * 500, mode: :number}
@@ -66,7 +66,7 @@ This will create a QR Code with byte encoded, alphanumeric and number segments. 
 ```ruby
 require "rqrcode_core"
 
-qr = RQRCodeCore::QRCode.new("https://kyan.com")
+qr = QRCode::QRCode.new("https://kyan.com")
 qr.modules.each do |row|
   row.each do |col|
     print col ? "#" : " "
@@ -85,7 +85,7 @@ data - the string or array you wish to encode
 
 size - the size (integer) of the QR Code (defaults to smallest size needed to encode the string)
 
-max_size - the max_size (Integer) of the QR Code (default RQRCodeCore::QRUtil.max_size)
+max_size - the max_size (Integer) of the QR Code (default QRCode::QRUtil.max_size)
 
 level  - the error correction level, can be:
   * Level :l 7%  of code can be restored
@@ -102,7 +102,7 @@ mode - the mode of the QR Code (defaults to alphanumeric or byte_8bit, depending
 #### Example
 
 ```ruby
-RQRCodeCore::QRCode.new("http://kyan.com", size: 2, level: :m, mode: :byte_8bit)
+QRCode::QRCode.new("http://kyan.com", size: 2, level: :m, mode: :byte_8bit)
 ```
 
 ## Development

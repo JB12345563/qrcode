@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RQRCodeCore
+module QRCode
   class QRPolynomial
     def initialize(num, shift)
       raise QRCodeRunTimeError, "#{num.size}/#{shift}" if num.empty?

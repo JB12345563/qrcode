@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RQRCodeCore
+module QRCode
   class QRSegment
     attr_reader :data, :mode
 
@@ -9,7 +9,7 @@ module RQRCodeCore
       @mode = QRMODE_NAME.dig(mode&.to_sym)
 
       # If mode is not explicitly found choose mode according to data type
-      @mode ||= if RQRCodeCore::QRNumeric.valid_data?(@data)
+      @mode ||= if QRNumeric.valid_data?(@data)
         QRMODE_NAME[:number]
       elsif QRAlphanumeric.valid_data?(@data)
         QRMODE_NAME[:alphanumeric]

@@ -1,6 +1,6 @@
-require "test_helper"
+require_relative "../test_helper"
 
-module RQRCodeCore
+module QRCode
   class QRUtilTest < Minitest::Test
     def test_demerit_points_4_dark_ratio
       # Test with all white modules (ratio = 0)

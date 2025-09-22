@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RQRCodeCore
+module QRCode
   QRMODE = {
     mode_number: 1 << 0,      # 1 (binary: 0001)
     mode_alpha_numk: 1 << 1,  # 2 (binary: 0010)
@@ -76,8 +76,8 @@ module RQRCodeCore
   # QRCode objects expect only one required constructor parameter
   # and an optional hash of any other. Here's a few examples:
   #
-  #  qr = RQRCodeCore::QRCode.new('hello world')
-  #  qr = RQRCodeCore::QRCode.new('hello world', size: 1, level: :m, mode: :alphanumeric)
+  #  qr = QRCode::QRCode.new('hello world')
+  #  qr = QRCode::QRCode.new('hello world', size: 1, level: :m, mode: :alphanumeric)
   #
 
   class QRCode
@@ -87,7 +87,7 @@ module RQRCodeCore
     #
     #   # data - the string, QRSegment or array of Hashes (with data:, mode: keys) you wish to encode
     #   # size - the size (Integer) of the QR Code (defaults to smallest size needed to encode the data)
-    #   # max_size - the max_size (Integer) of the QR Code (default RQRCodeCore::QRUtil.max_size)
+    #   # max_size - the max_size (Integer) of the QR Code (default QRCode::QRUtil.max_size)
     #   # level - the error correction level, can be:
     #      * Level :l 7%  of code can be restored
     #      * Level :m 15% of code can be restored
@@ -98,9 +98,9 @@ module RQRCodeCore
     #      * :alphanumeric
     #      * :byte_8bit
     #
-    #   qr = RQRCodeCore::QRCode.new('hello world', size: 1, level: :m, mode: :alphanumeric)
+    #   qr = QRCode::QRCode.new('hello world', size: 1, level: :m, mode: :alphanumeric)
     #   segment_qr = QRCodeCore::QRCode.new({ data: 'foo', mode: :byte_8bit })
-    #   multi_qr = RQRCodeCore::QRCode.new([{ data: 'foo', mode: :byte_8bit }, { data: 'bar1', mode: :alphanumeric }])
+    #   multi_qr = QRCode::QRCode.new([{ data: 'foo', mode: :byte_8bit }, { data: 'bar1', mode: :alphanumeric }])
 
     def initialize(data, *args)
       options = extract_options!(args)
@@ -200,7 +200,7 @@ module RQRCodeCore
 
     # Public overide as default inspect is very verbose
     #
-    #  RQRCodeCore::QRCode.new('my string to generate', size: 4, level: :h)
+    #  QRCode::QRCode.new('my string to generate', size: 4, level: :h)
     #  => QRCodeCore: @data='my string to generate', @error_correct_level=2, @version=4, @module_count=33
     #
 

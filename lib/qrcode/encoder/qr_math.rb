@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RQRCodeCore
+module QRCode
   class QRMath
     module_eval {
       exp_table = Array.new(256)

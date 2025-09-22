@@ -1,10 +1,10 @@
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "rqrcode_core/version"
+require "qrcode/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "rqrcode_core"
-  spec.version = RQRCodeCore::VERSION
+  spec.name = "qrcode"
+  spec.version = QRCode::VERSION
   spec.platform = Gem::Platform::RUBY
   spec.authors = ["Duncan Robertson"]
   spec.email = ["duncan@whomwah.com"]

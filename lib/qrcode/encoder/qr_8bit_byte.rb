@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RQRCodeCore
+module QRCode
   class QR8bitByte
     def initialize(data)
       @data = data

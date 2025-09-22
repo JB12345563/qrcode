@@ -1,3 +1,3 @@
 require "bundler/setup"
-require "rqrcode_core"
+require "qrcode"
 require "minitest/autorun"

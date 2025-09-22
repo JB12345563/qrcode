@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RQRCodeCore
+module QRCode
   class QRRSBlock
     attr_reader :data_count, :total_count
 

@@ -5,7 +5,7 @@ require "benchmark"
 Benchmark.bm do |benchmark|
   benchmark.report("RQRCode") do
     1000.times do
-      RQRCodeCore::QRCode.new("https://kyan.com").to_s
+      QRCode::QRCode.new("https://kyan.com").to_s
     end
   end
 end
