@@ -21,10 +21,6 @@ require_relative "math"
 require_relative "polynomial"
 require_relative "util"
 require_relative "bit_buffer"
-require_relative "numeric"
-require_relative "alphanumeric"
-require_relative "byte_8bit"
-require_relative "multi"
 require_relative "rs_block"
 require_relative "segment"
 
@@ -39,62 +35,45 @@ module QRCode
 		#  qr = QRCode::Encoder::Code.new('hello world', size: 1, level: :m, mode: :alphanumeric)
 		#
 		class Code
-			attr_reader :modules, :module_count, :version
+			attr_reader :modules, :module_count, :version, :segments
 			
 			# Alias for module_count - the width/height of the QR code square
 			alias_method :size, :module_count
 			
-			# Expects a string or array (for multi-segment encoding) to be parsed in, other args are optional
-			#
-			#   # data - the string, Encoder::Segment or array of Hashes (with data:, mode: keys) you wish to encode
-			#   # size - the size (Integer) of the QR Code (defaults to smallest size needed to encode the data)
-			#   # max_size - the max_size (Integer) of the QR Code (default QRCode::Encoder::Util.max_size)
-			#   # level - the error correction level, can be:
-			#      * Level :l 7%  of code can be restored
-			#      * Level :m 15% of code can be restored
-			#      * Level :q 25% of code can be restored
-			#      * Level :h 30% of code can be restored (default :h)
-			#   # mode - the mode of the QR Code (defaults to alphanumeric or byte_8bit, depending on the input data, only used when data is a string):
-			#      * :number
-			#      * :alphanumeric
-			#      * :byte_8bit
-			#
-			#   qr = QRCode::Encoder::Code.new('hello world', size: 1, level: :m, mode: :alphanumeric)
-			#   segment_qr = QRCodeCore::Code.new({ data: 'foo', mode: :byte_8bit })
-			#   multi_qr = QRCode::Encoder::Code.new([{ data: 'foo', mode: :byte_8bit }, { data: 'bar1', mode: :alphanumeric }])
-			def initialize(data, *args)
-				options = extract_options!(args)
-				
-				level = (options[:level] || :h).to_sym
-				max_size = options[:max_size] || Encoder::Util.max_size
-				
-				case data
-				when String
-					@data = Encoder::Segment.new(data: data, mode: options[:mode])
-				when Array
-					raise ArgumentError, "Array must contain Hashes with :data and :mode keys" unless data.all? {|seg| seg.is_a?(Hash) && %i[data mode].all? {|s| seg.key? s}}
-					@data = data.map {|seg| Encoder::Segment.new(**seg)}
-				when Encoder::Segment
-					@data = data
-				else
-					raise ArgumentError, "data must be a String, Segment, or an Array"
-				end
+			# Factory method to build QR code from data
+			# @parameter data [String, Array] The data to encode
+			# @parameter level [Symbol] Error correction level (:l, :m, :q, :h)
+			# @parameter mode [Symbol] Encoding mode (:auto, :number, :alphanumeric, :byte_8bit)
+			# @parameter size [Integer] QR code version (auto-detected if not specified)
+			# @parameter max_size [Integer] Maximum allowed version
+			def self.build(data, level: :h, mode: :auto, size: nil, max_size: nil)
+				segments = Segment.build(data, mode: mode)
+				new(segments, level: level, size: size, max_size: max_size)
+			end
+			
+			# Simple constructor that takes an array of segments
+			# @parameter segments [Array<Segment>] Array of segments to encode
+			# @parameter level [Symbol] Error correction level (:l, :m, :q, :h)
+			# @parameter size [Integer] QR code version (auto-detected if not specified)
+			# @parameter max_size [Integer] Maximum allowed version
+			def initialize(segments, level: :h, size: nil, max_size: nil)
+				@segments = Array(segments)
 				@error_correct_level = ERROR_CORRECT_LEVEL[level]
 				
 				unless @error_correct_level
 					raise ArgumentError, "Unknown error correction level `#{level.inspect}`"
 				end
 				
-				size = options[:size] || minimum_version(limit: max_size)
+				max_size ||= Encoder::Util.max_size
+				calculated_size = size || minimum_version(limit: max_size)
 				
-				if size > max_size
-					raise ArgumentError, "Given size greater than maximum possible size of #{Encoder::Util.max_size}"
+				if calculated_size > max_size
+					raise ArgumentError, "Given size greater than maximum possible size of #{max_size}"
 				end
 				
-				@version = size
+				@version = calculated_size
 				@module_count = @version * 4 + POSITION_PATTERN_LENGTH
 				@modules = Array.new(@module_count)
-				@data_list = multi_segment? ? Encoder::Multi.new(@data) : @data.writer
 				@data_cache = nil
 				make
 			end
@@ -159,7 +138,7 @@ module QRCode
 			#  => QRCodeCore: @data='my string to generate', @error_correct_level=2, @version=4, @module_count=33
 			#
 			def inspect
-				"QRCodeCore: @data='#{@data}', @error_correct_level=#{@error_correct_level}, @version=#{@version}, @module_count=#{@module_count}"
+				"QRCodeCore: @segments=#{@segments.size} segments, @error_correct_level=#{@error_correct_level}, @version=#{@version}, @module_count=#{@module_count}"
 			end
 			
 			# Return a symbol for current error connection level
@@ -169,19 +148,12 @@ module QRCode
 			
 			# Return true if this QR Code includes multiple encoded segments
 			def multi_segment?
-				@data.is_a?(Array)
+				@segments.size > 1
 			end
 			
-			# Return a symbol in QRMODE.keys for current mode used
+			# Return the primary mode used (first segment's mode)
 			def mode
-				case @data_list
-				when Encoder::Numeric
-					:mode_number
-				when Encoder::Alphanumeric
-					:mode_alpha_numk
-				else
-					:mode_8bit_byte
-				end
+				@segments.first&.mode || :mode_8bit_byte
 			end
 			
 			protected
@@ -213,8 +185,8 @@ module QRCode
 				
 				if @data_cache.nil?
 					@data_cache = Code.create_data(
-								@version, @error_correct_level, @data_list
-						)
+						@version, @error_correct_level, @segments
+					)
 				end
 				
 				map_data(@data_cache, mask_pattern)
@@ -362,7 +334,7 @@ module QRCode
 				
 				max_size_bits = MAX_BITS[error_correction_level][version - 1]
 				
-				size_bits = multi_segment? ? @data.sum {|seg| seg.size(version)} : @data.size(version)
+				size_bits = @segments.sum {|segment| segment.bit_size(version)}
 				
 				return version if size_bits < max_size_bits
 				
@@ -382,12 +354,12 @@ module QRCode
 					max_data_bytes * 8
 				end
 				
-				def create_data(version, error_correct_level, data_list) # :nodoc:
+				def create_data(version, error_correct_level, segments) # :nodoc:
 					rs_blocks = Encoder::RSBlock.get_rs_blocks(version, error_correct_level)
 					max_data_bits = Code.count_max_data_bits(rs_blocks)
 					buffer = Encoder::BitBuffer.new(version)
 					
-					data_list.write(buffer)
+					segments.each {|segment| segment.write(buffer)}
 					buffer.end_of_message(max_data_bits)
 					
 					if buffer.get_length_in_bits > max_data_bits

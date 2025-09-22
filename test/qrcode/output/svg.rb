@@ -6,7 +6,7 @@
 require "qrcode"
 
 describe QRCode::Output::SVG do
-	let(:qr_code) { QRCode::Encoder::Code.new("TEST") }
+	let(:qr_code) {QRCode::Encoder::Code.build("TEST")}
 	
 	it "can create SVG renderer with default options" do
 		renderer = QRCode::Output::SVG.new(qr_code)
@@ -39,13 +39,13 @@ describe QRCode::Output::SVG do
 		
 		# Should contain SVG root element
 		expect(svg).to be(:include?, '<svg xmlns="http://www.w3.org/2000/svg"')
-		expect(svg).to be(:include?, '</svg>')
+		expect(svg).to be(:include?, "</svg>")
 		
 		# Should contain background rectangle
 		expect(svg).to be(:include?, '<rect x="0" y="0"')
 		
 		# Should be properly closed
-		expect(svg).to be(:include?, '</svg>')
+		expect(svg).to be(:include?, "</svg>")
 	end
 	
 	it "calculates correct SVG dimensions" do
@@ -136,7 +136,7 @@ describe "QRCode.svg convenience method" do
 		expect(svg).to be_a(String)
 		expect(svg).to be(:include?, '<?xml version="1.0" encoding="UTF-8"?>')
 		expect(svg).to be(:include?, '<svg xmlns="http://www.w3.org/2000/svg"')
-		expect(svg).to be(:include?, '</svg>')
+		expect(svg).to be(:include?, "</svg>")
 	end
 	
 	it "passes options correctly" do
@@ -153,14 +153,14 @@ describe "QRCode.svg convenience method" do
 	it "works with different data inputs" do
 		# Test numeric data
 		svg_numeric = QRCode.svg("12345")
-		expect(svg_numeric).to be(:include?, '<svg')
+		expect(svg_numeric).to be(:include?, "<svg")
 		
 		# Test alphanumeric data
 		svg_alpha = QRCode.svg("HELLO123")
-		expect(svg_alpha).to be(:include?, '<svg')
+		expect(svg_alpha).to be(:include?, "<svg")
 		
 		# Test longer data
 		svg_long = QRCode.svg("This is a longer test string")
-		expect(svg_long).to be(:include?, '<svg')
+		expect(svg_long).to be(:include?, "<svg")
 	end
 end

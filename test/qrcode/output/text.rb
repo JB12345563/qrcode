@@ -6,7 +6,7 @@
 require "qrcode"
 
 describe QRCode::Output::Text do
-	let(:qr_code) { QRCode::Encoder::Code.new("TEST") }
+	let(:qr_code) {QRCode::Encoder::Code.build("TEST")}
 	
 	it "can create text renderer with default border" do
 		renderer = QRCode::Output::Text.new(qr_code)

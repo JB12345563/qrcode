@@ -12,14 +12,14 @@ require_relative "qrcode/output/svg"
 
 module QRCode
 	# Convenience method to create a QR code and render as text
-	def self.text(data, **options)
-		qr = Encoder::Code.new(data)
-		Output::Text.new(qr, **options).render
+	def self.text(data, level: :h, mode: :auto, size: nil, max_size: nil, **output_options)
+		qr = Encoder::Code.build(data, level: level, mode: mode, size: size, max_size: max_size)
+		Output::Text.new(qr, **output_options).render
 	end
 	
 	# Convenience method to create a QR code and render as SVG
-	def self.svg(data, **options)
-		qr = Encoder::Code.new(data)
-		Output::SVG.new(qr, **options).render
+	def self.svg(data, level: :h, mode: :auto, size: nil, max_size: nil, **output_options)
+		qr = Encoder::Code.build(data, level: level, mode: mode, size: size, max_size: max_size)
+		Output::SVG.new(qr, **output_options).render
 	end
 end
